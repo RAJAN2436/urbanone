@@ -545,6 +545,7 @@ export const AdminProvider = ({ children }) => {
         updateMerchantBoostScore,
         updateMerchantApprovalStatus,
         updateMerchantCommission,
+        updateMerchantRating,
         approveRiderKYC,
         updateRiderApproval,
         deleteRider,

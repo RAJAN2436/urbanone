@@ -160,7 +160,7 @@ export const RankingConsole = () => {
                         max="5.0"
                         step="0.05"
                         value={merchant.rating || 4.5}
-                        onChange={(e) => updateMerchantRating(merchant.id, e.target.value)}
+                        onChange={(e) => updateMerchantRating?.(merchant.id, e.target.value)}
                         className="w-12 text-right font-mono font-black text-xs text-[#ea580c] bg-white border border-zinc-200 rounded px-1 py-0.5"
                       />
                     </div>
@@ -170,7 +170,7 @@ export const RankingConsole = () => {
                       max="5.0"
                       step="0.05"
                       value={merchant.rating || 4.5}
-                      onChange={(e) => updateMerchantRating(merchant.id, e.target.value)}
+                      onChange={(e) => updateMerchantRating?.(merchant.id, e.target.value)}
                       className="w-full accent-amber-500 cursor-pointer h-1.5"
                       title="Adjust Rating (1.0 - 5.0)"
                     />
