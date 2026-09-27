@@ -52,7 +52,7 @@ export default function RiderAuthView() {
 
   // Server Connection Configuration
   const [showServerConfig, setShowServerConfig] = useState(false);
-  const [customUrlInput, setCustomUrlInput] = useState(serverUrl || 'http://10.66.34.136:5000');
+  const [customUrlInput, setCustomUrlInput] = useState(serverUrl || 'https://urbanone.onrender.com');
   const [testResult, setTestResult] = useState(null);
   const [testingPing, setTestingPing] = useState(false);
 
@@ -650,7 +650,7 @@ export default function RiderAuthView() {
                   type="text"
                   value={customUrlInput}
                   onChange={(e) => setCustomUrlInput(e.target.value)}
-                  placeholder="http://10.66.34.136:5000"
+                  placeholder="https://urbanone.onrender.com"
                   className="w-full px-2.5 py-1.5 rounded-xl border border-zinc-300 text-xs font-mono bg-white"
                 />
                 <div className="flex items-center gap-2 pt-1">

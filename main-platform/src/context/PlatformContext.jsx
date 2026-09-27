@@ -129,8 +129,10 @@ export const PlatformProvider = ({ children }) => {
   useEffect(() => {
     refreshFromBackend();
 
-    const backendHost = (typeof window !== 'undefined' && window.location.hostname) ? window.location.hostname : 'localhost';
-    const socketUrl = `http://${backendHost}:5000`;
+    const socketUrl = import.meta.env.VITE_SERVER_URL 
+      || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? `http://${window.location.hostname}:5000`
+          : 'https://urbanone.onrender.com');
 
     const socket = io(socketUrl, {
       transports: ['websocket', 'polling'],

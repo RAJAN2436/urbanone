@@ -1,6 +1,6 @@
 // KalsenOne Unified Backend API Client (Customer, Merchant & Admin)
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://urbanone.onrender.com/api';
 
 // Helper for fetch with JSON and error handling
 const apiRequest = async (endpoint, options = {}) => {

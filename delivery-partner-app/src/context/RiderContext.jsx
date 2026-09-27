@@ -22,11 +22,8 @@ export const getActiveServerUrl = () => {
     if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
   } catch (e) {}
   return import.meta.env.VITE_API_URL 
-    || (typeof window !== 'undefined' && window.location.origin.includes('3002') 
-        ? 'http://localhost:5000' 
-        : (typeof window !== 'undefined' && window.location.origin.startsWith('http') && !window.location.origin.includes('localhost')
-            ? window.location.origin 
-            : 'http://10.66.34.136:5000'));
+    || import.meta.env.VITE_SERVER_URL
+    || 'https://urbanone.onrender.com';
 };
 
 export const API_BASE = getActiveServerUrl();
@@ -56,7 +53,7 @@ export const RiderProvider = ({ children }) => {
   const [serverUrl, setServerUrl] = useState(() => getActiveServerUrl());
 
   const updateServerUrl = (newUrl) => {
-    const cleanUrl = newUrl?.trim().replace(/\/+$/, '') || 'http://10.66.34.136:5000';
+    const cleanUrl = newUrl?.trim().replace(/\/+$/, '') || 'https://urbanone.onrender.com';
     try {
       localStorage.setItem('kalsen_custom_server_url', cleanUrl);
     } catch (e) {}
@@ -69,7 +66,7 @@ export const RiderProvider = ({ children }) => {
     try {
       localStorage.removeItem('kalsen_custom_server_url');
     } catch (e) {}
-    const defaultUrl = 'http://10.66.34.136:5000';
+    const defaultUrl = 'https://urbanone.onrender.com';
     setServerUrl(defaultUrl);
     showToast('Server Reset 🔄', `Reset to: ${defaultUrl}`, 'info');
     setTimeout(() => { window.location.reload(); }, 600);
