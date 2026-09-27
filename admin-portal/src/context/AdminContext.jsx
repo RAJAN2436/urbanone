@@ -102,7 +102,8 @@ export const AdminProvider = ({ children }) => {
 
   useEffect(() => {
     refreshFromBackend();
-    const socket = io('http://localhost:5000', {
+    const serverUrl = import.meta.env.VITE_SERVER_URL || 'https://urbanone.onrender.com';
+    const socket = io(serverUrl, {
       transports: ['websocket', 'polling']
     });
 

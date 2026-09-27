@@ -471,6 +471,13 @@ export const AuthPresenter = {
             : 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&auto=format&fit=crop&q=80')
       });
 
+      // Broadcast update to Admin Portal & Customer App so new store is visible immediately
+      try {
+        const { emitMerchantsUpdate } = await import('../services/socketService.js');
+        const allMerchants = await database.getAllMerchants();
+        await emitMerchantsUpdate(allMerchants);
+      } catch (e) {}
+
       const token = `kalsen_merchant_jwt_${crypto.randomBytes(16).toString('hex')}`;
       return res.status(201).json({
         success: true,

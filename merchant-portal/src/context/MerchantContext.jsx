@@ -160,10 +160,7 @@ export const MerchantProvider = ({ children }) => {
 
   useEffect(() => {
     refreshFromBackend();
-    const socketUrl = import.meta.env.VITE_SERVER_URL 
-      || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-          ? `http://${window.location.hostname}:5000`
-          : 'https://urbanone.onrender.com');
+    const socketUrl = import.meta.env.VITE_SERVER_URL || 'https://urbanone.onrender.com';
 
     const socket = io(socketUrl, {
       transports: ['websocket', 'polling']
