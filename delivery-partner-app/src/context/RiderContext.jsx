@@ -19,15 +19,27 @@ const USHAIT_CENTER_COORDS = { lat: 27.8048, lng: 79.2882 };
 export const getActiveServerUrl = () => {
   try {
     const saved = localStorage.getItem('kalsen_custom_server_url');
-    if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
+    if (saved && saved.trim()) {
+      return saved.trim().replace(/\/api\/?$/, '').replace(/\/+$/, '');
+    }
   } catch (e) {}
-  return import.meta.env.VITE_API_URL 
-    || import.meta.env.VITE_SERVER_URL
+
+  const raw = import.meta.env.VITE_SERVER_URL 
+    || import.meta.env.VITE_API_URL 
     || 'https://urbanone.onrender.com';
+
+  return raw.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 };
 
 export const API_BASE = getActiveServerUrl();
-export const apiUrl = (path) => `${getActiveServerUrl()}${path.startsWith('/') ? '' : '/'}${path}`;
+export const apiUrl = (path) => {
+  const base = getActiveServerUrl();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  if (base.endsWith('/api') && cleanPath.startsWith('/api/')) {
+    return `${base}${cleanPath.slice(4)}`;
+  }
+  return `${base}${cleanPath}`;
+};
 
 export const RiderProvider = ({ children }) => {
   // Authenticated Rider Account (from Login/Register)

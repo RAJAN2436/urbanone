@@ -60,7 +60,7 @@ export default function RiderAuthView() {
     setTestingPing(true);
     setTestResult(null);
     try {
-      const target = customUrlInput.trim().replace(/\/+$/, '');
+      const target = customUrlInput.trim().replace(/\/api\/?$/, '').replace(/\/+$/, '');
       const t0 = Date.now();
       const res = await fetch(`${target}/api/health`, { method: 'GET' });
       const elapsed = Date.now() - t0;
