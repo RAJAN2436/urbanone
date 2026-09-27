@@ -1,6 +1,6 @@
 {
   "appId": "com.kalsen.rider",
-  "appName": "Kalsen Rider",
+  "appName": "UrbanOne Delivery",
   "webDir": "dist",
   "server": {
     "androidScheme": "http",

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Bike, ShieldCheck, ChevronRight, Sparkles } from 'lucide-react';
+import { UrbanOneLogo } from './UrbanOneLogo';
 
 export default function LandingAnimation({ onComplete }) {
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState('Starting KalsenOne Fleet...');
+  const [statusText, setStatusText] = useState('Starting UrbanOne Fleet...');
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function LandingAnimation({ onComplete }) {
       } else if (pct < 90) {
         setStatusText('Loading partner routing engine...');
       } else {
-        setStatusText('Welcome to KalsenOne Partner');
+        setStatusText('Welcome to UrbanOne Partner');
       }
 
       if (pct >= 100) {
@@ -71,85 +72,29 @@ export default function LandingAnimation({ onComplete }) {
         </button>
       </div>
 
-      {/* Center Hero: Clean KalsenOne Logo & Brand Identity */}
+      {/* Center Hero: Clean UrbanOne Logo & Brand Identity */}
       <div className="relative z-10 flex flex-col items-center justify-center my-auto text-center">
         
-        {/* Animated KalsenOne Logo Icon */}
+        {/* Animated UrbanOne Logo Icon */}
         <div className="relative mb-6">
           {/* Subtle Outer Pulse Ring */}
           <div className="absolute -inset-4 rounded-full bg-orange-100/50 animate-ping opacity-75 pointer-events-none" style={{ animationDuration: '2s' }} />
 
           {/* Logo Card with Soft Shadow */}
-          <div className="w-24 h-24 rounded-3xl bg-white border border-zinc-200/80 shadow-xl shadow-orange-500/10 flex items-center justify-center relative p-3">
-            {/* Official KalsenOne SVG Emblem */}
-            <svg
-              width="68"
-              height="68"
-              viewBox="0 0 200 200"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="transition-transform duration-700 hover:scale-105"
-            >
-              <defs>
-                <linearGradient id="kOrangeGradLanding" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#f97316" />
-                  <stop offset="100%" stopColor="#ea580c" />
-                </linearGradient>
-              </defs>
-
-              {/* Speed Streaks on Left */}
-              <rect x="20" y="56" width="34" height="10" rx="5" fill="#f97316" />
-              <rect x="8" y="78" width="46" height="10" rx="5" fill="#f97316" />
-              <rect x="18" y="100" width="36" height="10" rx="5" fill="#f97316" />
-              <rect x="28" y="122" width="26" height="10" rx="5" fill="#f97316" />
-
-              {/* Vertical & Left Slanted Stem of 'K' */}
-              <path
-                d="M 85 24 L 115 24 C 117 24 119 25 119 27 L 85 174 C 84 176 82 177 80 177 L 55 177 C 52 177 50 175 51 172 L 80 27 C 81 25 83 24 85 24 Z"
-                fill="url(#kOrangeGradLanding)"
-              />
-
-              {/* Top Diagonal Wing of 'K' */}
-              <path
-                d="M 115 48 L 180 24 C 183 23 186 26 184 29 L 140 102 L 105 76 Z"
-                fill="url(#kOrangeGradLanding)"
-              />
-
-              {/* Bottom Charcoal Diagonal Leg of 'K' */}
-              <path
-                d="M 125 106 L 176 172 C 178 175 176 178 172 178 L 138 178 C 135 178 133 177 131 174 L 92 120 Z"
-                fill="#18181b"
-              />
-
-              {/* Food Cloche Dome in Center */}
-              <g>
-                <circle cx="106" cy="62" r="5" fill="#ffffff" />
-                <path
-                  d="M 78 98 C 78 74 90 68 106 68 C 122 68 134 74 134 98 Z"
-                  fill="#ffffff"
-                />
-                <path
-                  d="M 116 73 C 126 77 130 84 131 96"
-                  stroke="#f97316"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-                <rect x="70" y="98" width="72" height="7" rx="3.5" fill="#ffffff" />
-              </g>
-            </svg>
+          <div className="w-24 h-24 rounded-3xl bg-zinc-950 border border-zinc-800 shadow-xl shadow-orange-500/10 flex items-center justify-center relative p-3">
+            <UrbanOneLogo size="xl" variant="icon" />
           </div>
 
           {/* Clean Floating Badge */}
-          <div className="absolute -bottom-2 -right-2 bg-zinc-900 text-white rounded-full p-1.5 shadow-md border-2 border-white">
-            <Bike className="w-3.5 h-3.5 text-orange-400" />
+          <div className="absolute -bottom-2 -right-2 bg-orange-500 text-white rounded-full p-1.5 shadow-md border-2 border-white">
+            <Bike className="w-3.5 h-3.5 text-white" />
           </div>
         </div>
 
-        {/* Official Brand Typography: KalsenOne */}
+        {/* Official Brand Typography: UrbanOne */}
         <div className="space-y-1">
           <div className="text-3xl font-black tracking-tight flex items-center justify-center font-['Outfit']">
-            <span className="text-zinc-900">Kalsen</span>
+            <span className="text-zinc-900">Urban</span>
             <span className="text-[#f97316]">One</span>
           </div>
           

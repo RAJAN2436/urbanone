@@ -24,6 +24,8 @@ import {
   Settings
 } from 'lucide-react';
 
+import { UrbanOneLogo } from './UrbanOneLogo';
+
 const PRESET_PHOTOS = [
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
@@ -38,10 +40,7 @@ export default function RiderAuthView() {
     registerRider, 
     logoutRider, 
     checkApprovalStatus, 
-    showToast,
-    serverUrl,
-    updateServerUrl,
-    resetServerUrl
+    showToast
   } = useRider();
 
   const [mode, setMode] = useState('register'); // 'login' | 'register'
@@ -49,32 +48,6 @@ export default function RiderAuthView() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const fileInputRef = useRef(null);
-
-  // Server Connection Configuration
-  const [showServerConfig, setShowServerConfig] = useState(false);
-  const [customUrlInput, setCustomUrlInput] = useState(serverUrl || 'https://urbanone.onrender.com');
-  const [testResult, setTestResult] = useState(null);
-  const [testingPing, setTestingPing] = useState(false);
-
-  const handleTestConnection = async () => {
-    setTestingPing(true);
-    setTestResult(null);
-    try {
-      const target = customUrlInput.trim().replace(/\/api\/?$/, '').replace(/\/+$/, '');
-      const t0 = Date.now();
-      const res = await fetch(`${target}/api/health`, { method: 'GET' });
-      const elapsed = Date.now() - t0;
-      if (res.ok) {
-        setTestResult({ ok: true, msg: `Online (${elapsed}ms) ✅` });
-      } else {
-        setTestResult({ ok: false, msg: `Server returned HTTP ${res.status}` });
-      }
-    } catch (e) {
-      setTestResult({ ok: false, msg: `Unreachable: ${e.message}` });
-    } finally {
-      setTestingPing(false);
-    }
-  };
 
   // Register Form State
   const [fullName, setFullName] = useState('');
@@ -276,11 +249,12 @@ export default function RiderAuthView() {
         <div className="absolute top-0 right-0 w-36 h-36 bg-orange-500/20 rounded-full blur-2xl pointer-events-none" />
         
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center font-black text-lg shadow-md shadow-orange-500/30">
-            K
-          </div>
+          <UrbanOneLogo size="md" variant="icon" />
           <div>
-            <h1 className="text-base font-black tracking-tight uppercase">Kalsen Partner Fleet</h1>
+            <h1 className="text-base font-black tracking-tight uppercase flex items-center gap-1.5 font-['Outfit']">
+              <span>Urban</span><span className="text-[#F97316]">One</span>
+              <span className="text-[11px] font-bold text-zinc-400 font-normal">Fleet</span>
+            </h1>
             <p className="text-[11px] text-zinc-400">Hyperlocal Delivery Network • Ushait</p>
           </div>
         </div>
@@ -622,61 +596,12 @@ export default function RiderAuthView() {
             </form>
           )}
 
-          {/* Server Connection Status & Config for Mobile Devices */}
-          <div className="mt-4 pt-3 border-t border-zinc-200/80 text-center">
-            <button
-              type="button"
-              onClick={() => setShowServerConfig(!showServerConfig)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-[10px] font-bold text-zinc-600 transition-colors cursor-pointer"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Server: {serverUrl?.replace('http://', '').replace('https://', '')}</span>
-              <Settings className="w-3 h-3 text-zinc-400 ml-1" />
-            </button>
-
-            {showServerConfig && (
-              <div className="mt-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200 text-left space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-bold text-zinc-700">
-                  <span>Backend Server URL</span>
-                  <button 
-                    type="button" 
-                    onClick={resetServerUrl} 
-                    className="text-orange-600 text-[10px] hover:underline cursor-pointer"
-                  >
-                    Reset Default
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  value={customUrlInput}
-                  onChange={(e) => setCustomUrlInput(e.target.value)}
-                  placeholder="https://urbanone.onrender.com"
-                  className="w-full px-2.5 py-1.5 rounded-xl border border-zinc-300 text-xs font-mono bg-white"
-                />
-                <div className="flex items-center gap-2 pt-1">
-                  <button
-                    type="button"
-                    disabled={testingPing}
-                    onClick={handleTestConnection}
-                    className="flex-1 py-1.5 rounded-xl bg-zinc-200 hover:bg-zinc-300 text-zinc-800 text-[11px] font-bold cursor-pointer disabled:opacity-50"
-                  >
-                    {testingPing ? 'Pinging...' : 'Test Connection'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateServerUrl(customUrlInput)}
-                    className="flex-1 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-[11px] font-bold cursor-pointer"
-                  >
-                    Save & Connect
-                  </button>
-                </div>
-                {testResult && (
-                  <p className={`text-[10px] font-bold pt-0.5 ${testResult.ok ? 'text-emerald-600' : 'text-rose-600'}`}>
-                    {testResult.msg}
-                  </p>
-                )}
-              </div>
-            )}
+          {/* Official Production UrbanOne Fleet Status */}
+          <div className="mt-4 pt-3 border-t border-zinc-100 text-center">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-50 border border-zinc-200/80 text-[10px] font-bold text-zinc-500">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>UrbanOne Cloud Network Active</span>
+            </div>
           </div>
         </div>
       </div>
