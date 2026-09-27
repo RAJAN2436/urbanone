@@ -28,12 +28,12 @@ export const AndroidAppBanner = () => {
   const handleDownloadApk = () => {
     confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
     playSound('success');
-    showToast('Download Started 🤖', 'KalsenOne Android App (v2.4.0) APK is downloading...', 'success');
+    showToast('Download Started 🤖', 'UrbanOne Android App (v2.4.0) APK is downloading...', 'success');
   };
 
   const handleGooglePlayClick = () => {
     playSound('success');
-    showToast('Google Play Store 🚀', 'Redirecting to KalsenOne on Google Play Store...', 'info');
+    showToast('Google Play Store 🚀', 'Redirecting to UrbanOne on Google Play Store...', 'info');
   };
 
   const handleScanSimulation = () => {
@@ -45,7 +45,7 @@ export const AndroidAppBanner = () => {
       setIsScanning(false);
       confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
       playSound('success');
-      showToast('Scan Verified! 🎉', 'Opening KalsenOne App Store page & download...', 'success');
+      showToast('Scan Verified! 🎉', 'Opening UrbanOne App Store page & download...', 'success');
     }, 1400);
   };
 
@@ -84,7 +84,7 @@ export const AndroidAppBanner = () => {
 
           <div className="space-y-2">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-['Outfit'] leading-tight text-zinc-950">
-              Get the <span className="text-[#f97316]">KalsenOne Android App</span>
+              Get the <span className="text-[#f97316]">UrbanOne Android App</span>
             </h2>
             <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed max-w-xl">
               Order gourmet meals, 15-minute essentials, and medicines with 1-tap UPI payment, lock-screen live GPS tracking, and flat 50% discount on your first 3 orders.
@@ -104,7 +104,7 @@ export const AndroidAppBanner = () => {
               <div className="w-5 h-5 rounded-full bg-orange-100 text-[#f97316] flex items-center justify-center flex-shrink-0">
                 <Flame className="w-3 h-3 fill-current" />
               </div>
-              <span>Flat 50% Off (Code: KALSEN50)</span>
+              <span>Flat 50% Off (Code: URBAN50)</span>
             </div>
 
             <div className="flex items-center gap-2 text-xs text-zinc-700 font-semibold">
@@ -337,7 +337,7 @@ export const AndroidAppBanner = () => {
                   <div className="text-[8px] font-black uppercase bg-black/20 px-1 py-0.2 rounded w-max">
                     APP EXCLUSIVE
                   </div>
-                  <div className="text-xs font-black">FLAT 50% OFF (Code: KALSEN50)</div>
+                  <div className="text-xs font-black">FLAT 50% OFF (Code: URBAN0)</div>
                   <div className="text-[8px] text-orange-100">Instant delivery to your doorstep</div>
                 </div>
 

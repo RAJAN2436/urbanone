@@ -109,7 +109,7 @@ export const CartCheckoutModal = () => {
   const selectedAddress = safeAddresses.find(a => a.id === customer?.selectedAddressId) || safeAddresses[0];
 
   const merchantImage = merchant.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=80';
-  const merchantName = merchant.name || 'Kalsen Partner Kitchen';
+  const merchantName = merchant.name || 'Urban Partner Kitchen';
   const merchantAddress = (merchant.address || 'Ushait, UP').split(',')[0];
   const prepTime = (merchant.avgPrepTime || 20) + 10;
 
@@ -396,7 +396,7 @@ export const CartCheckoutModal = () => {
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2 font-bold text-zinc-950">
                 <Award className="w-4 h-4 text-[#f97316]" />
-                <span>Kalsen Rewards ({loyaltyPoints} pts)</span>
+                <span>Urban Rewards ({loyaltyPoints} pts)</span>
               </div>
               <span className="text-[10px] text-zinc-500 font-bold">1 pt = ₹0.25</span>
             </div>
@@ -423,7 +423,7 @@ export const CartCheckoutModal = () => {
             <div className="space-y-2">
               {[
                 { id: 'UPI (Google Pay)', label: 'UPI (Google Pay / PhonePe / Paytm)', icon: QrCode, subtitle: 'Fast 1-Click Payment' },
-                { id: 'Kalsen Wallet', label: `Kalsen Wallet (Balance ₹${walletBalance})`, icon: Wallet, subtitle: 'Instant 1-Tap Checkout' },
+                { id: 'Urban Wallet', label: `Urban Wallet (Balance ₹${walletBalance})`, icon: Wallet, subtitle: 'Instant 1-Tap Checkout' },
                 { id: 'Credit / Debit Card', label: 'Credit or Debit Card', icon: CreditCard, subtitle: 'Visa, Mastercard, RuPay' },
                 { id: 'Cash on Delivery', label: 'Cash on Delivery / Pay at Gate', icon: Banknote, subtitle: 'Cash or UPI upon delivery' }
               ].map((pm) => (

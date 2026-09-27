@@ -252,7 +252,7 @@ export const ProfileCompletionModal = () => {
                 <option value="Mandi Gate & Sabzi Bazar">Mandi Gate & Sabzi Bazar</option>
                 <option value="Civil Lines Residential Area">Civil Lines Residential Area</option>
                 <option value="Near Ushait Government Hospital">Near Ushait Government Hospital</option>
-                <option value="Kalsen Central Hub, Ushait">Kalsen Central Hub, Ushait</option>
+                <option value="Urban Central Hub, Ushait">Urban Central Hub, Ushait</option>
               </select>
             </div>
           </div>

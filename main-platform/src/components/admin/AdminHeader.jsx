@@ -32,7 +32,7 @@ export const AdminHeader = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-lg tracking-tight text-white font-['Outfit']">
-                KalsenOne<span className="text-purple-400">Co</span>
+                UrbanOne<span className="text-purple-400">Co</span>
               </span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase">
                 War Room

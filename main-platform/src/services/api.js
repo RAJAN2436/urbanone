@@ -1,4 +1,4 @@
-// KalsenOne Unified Backend API Client (Customer, Merchant & Admin)
+// UrbanOne Unified Backend API Client (Customer, Merchant & Admin)
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://urbanone.onrender.com/api';
 

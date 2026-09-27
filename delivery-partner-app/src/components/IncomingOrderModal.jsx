@@ -12,10 +12,12 @@ import {
 export const IncomingOrderModal = () => {
   const { incomingOrder, acceptIncomingOrder, rejectIncomingOrder } = useRider();
   const [timeLeft, setTimeLeft] = useState(30);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!incomingOrder) return;
     setTimeLeft(30);
+    setIsSubmitting(false);
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -30,6 +32,17 @@ export const IncomingOrderModal = () => {
 
     return () => clearInterval(timer);
   }, [incomingOrder]);
+
+  const handleAccept = async () => {
+    if (isSubmitting || !incomingOrder?.id) return;
+    setIsSubmitting(true);
+    await acceptIncomingOrder(incomingOrder.id);
+  };
+
+  const handleReject = () => {
+    if (isSubmitting) return;
+    rejectIncomingOrder();
+  };
 
   if (!incomingOrder) return null;
 
@@ -103,7 +116,7 @@ export const IncomingOrderModal = () => {
             <div className="min-w-0">
               <div className="text-[10px] font-black uppercase tracking-wider text-amber-400">Pickup Restaurant</div>
               <div className="text-xs font-bold text-white truncate mt-0.5">
-                {incomingOrder.merchantName || 'Kalsen Merchant'}
+                {incomingOrder.merchantName || 'Urban Merchant'}
               </div>
               <div className="text-[11px] text-zinc-400 truncate">
                 {incomingOrder.pickupAddress || 'Clock Tower Chowk, Ushait (243641)'}
@@ -131,18 +144,26 @@ export const IncomingOrderModal = () => {
         {/* Accept / Decline Action Buttons */}
         <div className="p-4 border-t border-zinc-800 bg-zinc-950 flex items-center gap-3">
           <button
-            onClick={rejectIncomingOrder}
-            className="flex-1 py-3.5 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-black text-xs transition-colors cursor-pointer active:scale-95"
+            onClick={handleReject}
+            disabled={isSubmitting}
+            className={`flex-1 py-3.5 rounded-2xl bg-zinc-800 text-zinc-300 font-black text-xs transition-colors ${
+              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-zinc-700 cursor-pointer active:scale-95'
+            }`}
           >
             Pass ({timeLeft}s)
           </button>
 
           <button
-            onClick={() => acceptIncomingOrder(incomingOrder.id)}
-            className="flex-[2] py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-[#ea580c] hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs shadow-xl shadow-orange-500/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+            onClick={handleAccept}
+            disabled={isSubmitting}
+            className={`flex-[2] py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-[#ea580c] text-white font-black text-xs shadow-xl shadow-orange-500/30 transition-all flex items-center justify-center gap-2 ${
+              isSubmitting
+                ? 'opacity-70 cursor-not-allowed scale-[0.98]'
+                : 'hover:from-orange-600 hover:to-orange-700 cursor-pointer active:scale-95'
+            }`}
           >
             <Check className="w-4 h-4 stroke-[3]" />
-            <span>Accept Delivery (+₹{estimatedPayout})</span>
+            <span>{isSubmitting ? 'Accepting Delivery...' : `Accept Delivery (+₹${estimatedPayout})`}</span>
           </button>
         </div>
 

@@ -6,14 +6,13 @@ import RiderEarningsView from './components/RiderEarningsView';
 import RiderProfileView from './components/RiderProfileView';
 import RiderAuthView from './components/RiderAuthView';
 import LandingAnimation from './components/LandingAnimation';
+import { UrbanOneLogo } from './components/UrbanOneLogo';
 import {
   Navigation2,
   Wallet,
   User,
   ClipboardList,
   Power,
-  Wifi,
-  BatteryMedium,
   Radio,
   Sparkles,
   MapPin,
@@ -40,71 +39,37 @@ export default function App() {
   } = useRider();
 
   const [activeTab, setActiveTab] = useState('map'); // 'map', 'orders', 'earnings', 'profile'
-  const [currentTime, setCurrentTime] = useState('');
   const [showLanding, setShowLanding] = useState(true);
-
-  // Clock for Android Status Bar
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 10000);
-    return () => clearInterval(interval);
-  }, []);
 
   // If rider is not logged in or pending approval, display Login/Register/Pending view
   if (!isLoggedIn || !isApproved) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-start text-zinc-900 selection:bg-orange-500 selection:text-white">
-        <div className="w-full max-w-md min-h-screen bg-zinc-100 flex flex-col relative shadow-2xl overflow-x-hidden">
+      <div className="h-full w-full bg-zinc-950 flex flex-col items-center justify-start text-zinc-900 selection:bg-orange-500 selection:text-white overflow-hidden">
+        <div className="w-full max-w-md h-full bg-zinc-100 flex flex-col relative shadow-2xl overflow-hidden">
           {/* Landing Animation strictly within Mobile Display */}
           {showLanding && (
             <LandingAnimation onComplete={() => setShowLanding(false)} />
           )}
 
-          {/* Android Native Status Bar */}
-          <div className="bg-zinc-900 text-white px-5 pt-2 pb-1.5 flex items-center justify-between text-[11px] font-semibold tracking-wide z-40 select-none">
-            <span>{currentTime || '12:30'}</span>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-zinc-400 font-mono">5G</span>
-              <Wifi className="w-3 h-3 text-zinc-300" />
-              <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-              <BatteryMedium className="w-3.5 h-3.5 text-zinc-300 ml-0.5" />
-              <span className="text-[10px] text-zinc-300">88%</span>
-            </div>
+          <div className="flex-1 overflow-y-auto overscroll-contain">
+            <RiderAuthView />
           </div>
-
-          <RiderAuthView />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-start text-zinc-900 selection:bg-orange-500 selection:text-white">
+    <div className="h-full w-full bg-zinc-950 flex flex-col items-center justify-start text-zinc-900 selection:bg-orange-500 selection:text-white overflow-hidden">
       {/* Mobile Device Container */}
-      <div className="w-full max-w-md min-h-screen bg-zinc-100 flex flex-col relative shadow-2xl overflow-x-hidden">
+      <div className="w-full max-w-md h-full bg-zinc-100 flex flex-col relative shadow-2xl overflow-hidden select-none">
         {/* Landing Animation strictly within Mobile Display */}
         {showLanding && (
           <LandingAnimation onComplete={() => setShowLanding(false)} />
         )}
 
-        {/* Android Native Status Bar */}
-        <div className="bg-zinc-900 text-white px-5 pt-2 pb-1.5 flex items-center justify-between text-[11px] font-semibold tracking-wide z-40 select-none">
-          <span>{currentTime || '12:30'}</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-zinc-400 font-mono">5G</span>
-            <Wifi className="w-3 h-3 text-zinc-300" />
-            <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-            <BatteryMedium className="w-3.5 h-3.5 text-zinc-300 ml-0.5" />
-            <span className="text-[10px] text-zinc-300">88%</span>
-          </div>
-        </div>
-
-        {/* Top App Header */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-zinc-200/80 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-xs">
+        {/* Top App Header - Fixed Header (Does not move on scroll/swipe) */}
+        <header className="bg-white/95 backdrop-blur-md border-b border-zinc-200/80 px-4 py-3 shrink-0 z-30 flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-2xl overflow-hidden border border-orange-500/40 bg-zinc-900 flex-shrink-0 shadow-md">
               <img src={rider.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'} alt={rider.name} className="w-full h-full object-cover" />
@@ -122,22 +87,27 @@ export default function App() {
             </div>
           </div>
 
-          {/* Duty Switch (Online / Offline) */}
-          <button
-            onClick={toggleDuty}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-xs transition-all cursor-pointer ${isOnline
-                ? 'bg-emerald-500 text-white shadow-emerald-500/30'
-                : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300'
-              }`}
-          >
-            <Power className="w-3.5 h-3.5" />
-            <span>{isOnline ? 'ONLINE' : 'GO ONLINE'}</span>
-          </button>
+          {/* Duty Switch & Brand Logo */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center" title="UrbanOne Delivery Partner">
+              <UrbanOneLogo size="xs" variant="icon" />
+            </div>
+            <button
+              onClick={toggleDuty}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-xs transition-all cursor-pointer ${isOnline
+                  ? 'bg-emerald-500 text-white shadow-emerald-500/30'
+                  : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300'
+                }`}
+            >
+              <Power className="w-3.5 h-3.5" />
+              <span>{isOnline ? 'ONLINE' : 'GO ONLINE'}</span>
+            </button>
+          </div>
         </header>
 
-        {/* Duty Status Bar (When Online) */}
+        {/* Duty Status Bar (When Online) - Fixed Subheader */}
         {isOnline && !activeOrder && (
-          <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white px-4 py-2 text-xs flex items-center justify-between shadow-xs z-20">
+          <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white px-4 py-2 text-xs flex items-center justify-between shadow-xs shrink-0 z-20">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -155,9 +125,9 @@ export default function App() {
           </div>
         )}
 
-        {/* Offline Banner */}
+        {/* Offline Banner - Fixed Subheader */}
         {!isOnline && (
-          <div className="bg-zinc-800 text-zinc-300 px-4 py-2 text-xs flex items-center justify-between z-20">
+          <div className="bg-zinc-800 text-zinc-300 px-4 py-2 text-xs flex items-center justify-between shrink-0 z-20">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-zinc-500" />
               <span className="text-[11px] font-medium">You are Offline. Go Online to receive orders.</span>
@@ -171,11 +141,11 @@ export default function App() {
           </div>
         )}
 
-        {/* Main Tab Content */}
-        <main className="flex-1 flex flex-col relative overflow-y-auto overflow-x-hidden w-full max-w-full min-w-0">
+        {/* Main Tab Content - Scrollable Content Body */}
+        <main className="flex-1 flex flex-col relative overflow-y-auto overflow-x-hidden w-full max-w-full min-w-0 overscroll-contain">
           {/* TAB 1: MAP & ACTIVE TASK */}
           {activeTab === 'map' && (
-            <div className="flex-1 flex flex-col pb-20">
+            <div className="flex-1 flex flex-col pb-4">
               {/* If active order exists, show Delivery Task with Google Maps button */}
               {activeOrder ? (
                 <div className="flex-1 flex flex-col p-4 space-y-3">
@@ -268,7 +238,7 @@ export default function App() {
                             </div>
 
                             <div>
-                              <h4 className="text-xs font-bold text-zinc-900">{ord.merchantName || 'Kalsen Merchant'}</h4>
+                              <h4 className="text-xs font-bold text-zinc-900">{ord.merchantName || 'Urban Merchant'}</h4>
                               <p className="text-[11px] text-zinc-500 mt-0.5 truncate">{ord.deliveryAddress || 'Ushait Center'}</p>
                             </div>
 
@@ -359,7 +329,7 @@ export default function App() {
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-bold text-zinc-900">{ord.merchantName || 'Kalsen Merchant'}</h4>
+                        <h4 className="text-xs font-bold text-zinc-900">{ord.merchantName || 'Urban Merchant'}</h4>
                         <p className="text-[11px] text-zinc-500 mt-0.5">{ord.deliveryAddress || 'Ushait Center'}</p>
                       </div>
 
@@ -400,8 +370,8 @@ export default function App() {
         {/* Incoming Order Alert Modal Popup */}
         {incomingOrder && <IncomingOrderModal />}
 
-        {/* Android Bottom Navigation Bar */}
-        <nav className="sticky bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-zinc-200 px-2 py-2 z-40 flex items-center justify-around shadow-lg shrink-0 mt-auto">
+        {/* Android Bottom Navigation Bar - Fixed (Cannot move on swipe) */}
+        <nav className="shrink-0 w-full bg-white/95 backdrop-blur-md border-t border-zinc-200 px-2 py-2 z-40 flex items-center justify-around shadow-lg">
           <button
             onClick={() => setActiveTab('map')}
             className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all cursor-pointer ${activeTab === 'map' ? 'text-orange-600' : 'text-zinc-400 hover:text-zinc-600'

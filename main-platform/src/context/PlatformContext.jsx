@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { INITIAL_MERCHANTS, INITIAL_RIDERS, INITIAL_ORDERS, SURGE_ZONES, PROMO_CODES } from '../mockData';
 import { api } from '../services/api';
 import { io } from 'socket.io-client';
+import { isOrderOwnedByCustomer } from '../utils/orderOwnership';
 
 const PlatformContext = createContext(null);
 
@@ -19,9 +20,11 @@ export const PlatformProvider = ({ children }) => {
   const [activeApp, setActiveApp] = useState('customer'); // 'customer' | 'rider' | 'merchant' | 'admin' | 'split'
   const [customerSubView, setCustomerSubView] = useState('landing'); // 'home' | 'login' | 'register' | 'merchant' | 'cart' | 'tracking' | 'profile' | 'landing'
   const [selectedMerchantId, setSelectedMerchantId] = useState('');
+  
+  // Isolated per-window tracking order ID (sessionStorage prevents window leakage on localhost)
   const [activeTrackingOrderId, setActiveTrackingOrderId] = useState(() => {
     try {
-      return localStorage.getItem('kalsen_active_tracking_order_id') || null;
+      return sessionStorage.getItem('urban_active_tracking_order_id') || null;
     } catch (e) {
       return null;
     }
@@ -30,7 +33,8 @@ export const PlatformProvider = ({ children }) => {
   const clearTrackingData = () => {
     setActiveTrackingOrderId(null);
     try {
-      localStorage.removeItem('kalsen_active_tracking_order_id');
+      sessionStorage.removeItem('urban_active_tracking_order_id');
+      localStorage.removeItem('urban_active_tracking_order_id');
     } catch (e) {}
   };
 
@@ -38,22 +42,29 @@ export const PlatformProvider = ({ children }) => {
     setActiveTrackingOrderId(orderId);
     try {
       if (orderId) {
-        localStorage.setItem('kalsen_active_tracking_order_id', orderId);
+        sessionStorage.setItem('urban_active_tracking_order_id', orderId);
       } else {
-        localStorage.removeItem('kalsen_active_tracking_order_id');
+        sessionStorage.removeItem('urban_active_tracking_order_id');
+        localStorage.removeItem('urban_active_tracking_order_id');
       }
     } catch (e) {}
   };
 
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('kalsen_is_authenticated') === 'true';
+    try {
+      const sessionAuth = sessionStorage.getItem('urban_is_authenticated');
+      if (sessionAuth != null) return sessionAuth === 'true';
+      return localStorage.getItem('urban_is_authenticated') === 'true';
+    } catch (e) {
+      return false;
+    }
   });
 
   // Core Datasets
   const [merchants, setMerchants] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_merchants_data');
+      const saved = localStorage.getItem('urban_merchants_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -66,7 +77,7 @@ export const PlatformProvider = ({ children }) => {
   const [riders, setRiders] = useState(INITIAL_RIDERS);
   const [orders, setOrders] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_orders_data');
+      const saved = localStorage.getItem('urban_orders_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -94,12 +105,12 @@ export const PlatformProvider = ({ children }) => {
       if (merchantsRes.status === 'fulfilled') {
         const list = Array.isArray(merchantsRes.value?.merchants) ? merchantsRes.value.merchants : [];
         setMerchants(list);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(list)); } catch (e) {}
       }
       if (ordersRes.status === 'fulfilled') {
         const list = Array.isArray(ordersRes.value?.orders) ? ordersRes.value.orders : [];
         setOrders(list);
-        try { localStorage.setItem('kalsen_orders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_orders_data', JSON.stringify(list)); } catch (e) {}
         
         // Auto-clear tracking data if active tracked order has been delivered or cancelled
         if (activeTrackingOrderId) {
@@ -111,11 +122,11 @@ export const PlatformProvider = ({ children }) => {
       }
       if (ridersRes.status === 'fulfilled' && Array.isArray(ridersRes.value?.riders)) {
         setRiders(ridersRes.value.riders);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(ridersRes.value.riders)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(ridersRes.value.riders)); } catch (e) {}
       }
       if (zonesRes.status === 'fulfilled' && Array.isArray(zonesRes.value?.zones)) {
         setSurgeZones(zonesRes.value.zones);
-        try { localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(zonesRes.value.zones)); } catch (e) {}
+        try { localStorage.setItem('urban_surge_zones_data', JSON.stringify(zonesRes.value.zones)); } catch (e) {}
       }
       if (promosRes.status === 'fulfilled' && Array.isArray(promosRes.value?.promos)) {
         setPromos(promosRes.value.promos);
@@ -145,7 +156,7 @@ export const PlatformProvider = ({ children }) => {
       const list = Array.isArray(payload?.merchants) ? payload.merchants : (Array.isArray(payload) ? payload : null);
       if (list) {
         setMerchants(list);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(list)); } catch (e) {}
       }
     });
 
@@ -154,13 +165,13 @@ export const PlatformProvider = ({ children }) => {
       const list = Array.isArray(payload?.orders) ? payload.orders : (Array.isArray(payload) ? payload : null);
       if (list) {
         setOrders(list);
-        try { localStorage.setItem('kalsen_orders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_orders_data', JSON.stringify(list)); } catch (e) {}
         // Clear tracking data if the tracked order is marked delivered
         setActiveTrackingOrderId(prev => {
           if (!prev) return null;
           const match = list.find(o => o.id === prev);
           if (match && (match.orderStatus === 'delivered' || match.orderStatus === 'cancelled')) {
-            try { localStorage.removeItem('kalsen_active_tracking_order_id'); } catch (e) {}
+            try { localStorage.removeItem('urban_active_tracking_order_id'); } catch (e) {}
             return null;
           }
           return prev;
@@ -176,7 +187,7 @@ export const PlatformProvider = ({ children }) => {
         if (updatedOrder.orderStatus === 'delivered' || updatedOrder.orderStatus === 'cancelled') {
           setActiveTrackingOrderId(prev => {
             if (prev === updatedOrder.id) {
-              try { localStorage.removeItem('kalsen_active_tracking_order_id'); } catch (e) {}
+              try { localStorage.removeItem('urban_active_tracking_order_id'); } catch (e) {}
               return null;
             }
             return prev;
@@ -192,7 +203,7 @@ export const PlatformProvider = ({ children }) => {
         if (updatedOrder.orderStatus === 'delivered' || updatedOrder.orderStatus === 'cancelled') {
           setActiveTrackingOrderId(prev => {
             if (prev === updatedOrder.id) {
-              try { localStorage.removeItem('kalsen_active_tracking_order_id'); } catch (e) {}
+              try { localStorage.removeItem('urban_active_tracking_order_id'); } catch (e) {}
               return null;
             }
             return prev;
@@ -223,7 +234,7 @@ export const PlatformProvider = ({ children }) => {
       const list = Array.isArray(payload?.riders) ? payload.riders : (Array.isArray(payload) ? payload : null);
       if (list) {
         setRiders(list);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(list)); } catch (e) {}
       }
     });
 
@@ -232,14 +243,14 @@ export const PlatformProvider = ({ children }) => {
       const list = Array.isArray(payload?.zones) ? payload.zones : (Array.isArray(payload) ? payload : null);
       if (list) {
         setSurgeZones(list);
-        try { localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_surge_zones_data', JSON.stringify(list)); } catch (e) {}
       }
     });
     socket.on('surgeZones:updated', (payload) => {
       const list = Array.isArray(payload?.zones) ? payload.zones : (Array.isArray(payload) ? payload : null);
       if (list) {
         setSurgeZones(list);
-        try { localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_surge_zones_data', JSON.stringify(list)); } catch (e) {}
       }
     });
 
@@ -277,15 +288,20 @@ export const PlatformProvider = ({ children }) => {
     profileCompleted: false
   };
 
-  // Customer Profile & State
+  // Customer Profile & State: Prioritize sessionStorage so two windows on localhost have isolated accounts
   const [customer, setCustomer] = useState(() => {
-    const saved = localStorage.getItem('kalsen_customer_profile');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
+    try {
+      const sessionSaved = sessionStorage.getItem('urban_customer_profile');
+      if (sessionSaved) {
+        const parsed = JSON.parse(sessionSaved);
         if (parsed && parsed.id) return parsed;
-      } catch (e) {}
-    }
+      }
+      const localSaved = localStorage.getItem('urban_customer_profile');
+      if (localSaved) {
+        const parsed = JSON.parse(localSaved);
+        if (parsed && parsed.id) return parsed;
+      }
+    } catch (e) {}
     return EMPTY_GUEST_PROFILE;
   });
 
@@ -314,7 +330,7 @@ export const PlatformProvider = ({ children }) => {
       loyaltyPoints: user.loyaltyPoints ?? user.loyalty_points ?? prev?.loyaltyPoints ?? 200,
       walletBalance: user.walletBalance ?? user.wallet_balance ?? prev?.walletBalance ?? 150,
       streakCount: user.streakCount ?? user.streak_count ?? prev?.streakCount ?? 1,
-      referralCode: user.referralCode || user.referral_code || prev?.referralCode || `KALSEN-${Date.now().toString().slice(-4)}`,
+      referralCode: user.referralCode || user.referral_code || prev?.referralCode || `URBAN-${Date.now().toString().slice(-4)}`,
       addresses: rawAddresses,
       selectedAddressId: rawAddresses[0]?.id || prev?.selectedAddressId || '',
       profileCompleted: isCompleted
@@ -331,7 +347,10 @@ export const PlatformProvider = ({ children }) => {
         if (res?.user) {
           setCustomer(prev => {
             const updated = formatCustomerData(res.user, prev);
-            try { localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated)); } catch (e) {}
+            try {
+              sessionStorage.setItem('urban_customer_profile', JSON.stringify(updated));
+              localStorage.setItem('urban_customer_profile', JSON.stringify(updated));
+            } catch (e) {}
             return updated;
           });
         }
@@ -341,24 +360,55 @@ export const PlatformProvider = ({ children }) => {
     }
   }, [isAuthenticated, customer?.id]);
 
+  // Ensure activeTrackingOrderId belongs strictly to the currently authenticated customer
+  useEffect(() => {
+    if (!activeTrackingOrderId) return;
+    if (!isAuthenticated || !customer || !customer.id) {
+      clearTrackingData();
+      return;
+    }
+    if (Array.isArray(orders) && orders.length > 0) {
+      const match = orders.find(o => o.id === activeTrackingOrderId);
+      if (match) {
+        if (!isOrderOwnedByCustomer(match, customer) || match.orderStatus === 'delivered' || match.orderStatus === 'cancelled') {
+          clearTrackingData();
+        }
+      } else {
+        clearTrackingData();
+      }
+    }
+  }, [activeTrackingOrderId, isAuthenticated, customer?.id, customer?.phone, customer?.email, orders]);
+
   const login = (userData) => {
+    clearTrackingData();
     setIsAuthenticated(true);
-    localStorage.setItem('kalsen_is_authenticated', 'true');
-    setCustomer(prev => {
-      const updated = formatCustomerData(userData, prev);
-      localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
-      return updated;
-    });
+    try {
+      sessionStorage.setItem('urban_is_authenticated', 'true');
+      localStorage.setItem('urban_is_authenticated', 'true');
+    } catch (e) {}
+    // Format without merging prior user's phone or email
+    const freshProfile = formatCustomerData(userData, {});
+    setCustomer(freshProfile);
+    try {
+      sessionStorage.setItem('urban_customer_profile', JSON.stringify(freshProfile));
+      localStorage.setItem('urban_customer_profile', JSON.stringify(freshProfile));
+    } catch (e) {}
   };
 
   const register = (userData) => {
+    clearTrackingData();
     setIsAuthenticated(true);
-    localStorage.setItem('kalsen_is_authenticated', 'true');
-    setCustomer(prev => {
-      const updated = formatCustomerData(userData, prev);
-      localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
-      return updated;
-    });
+    try {
+      sessionStorage.setItem('urban_is_authenticated', 'true');
+      localStorage.setItem('urban_is_authenticated', 'true');
+    } catch (e) {}
+    // Format without merging prior user's phone or email
+    const freshProfile = formatCustomerData(userData, {});
+    setCustomer(freshProfile);
+    try {
+      sessionStorage.setItem('urban_customer_profile', JSON.stringify(freshProfile));
+      localStorage.setItem('urban_customer_profile', JSON.stringify(freshProfile));
+    } catch (e) {}
   };
 
   const completeProfile = async ({ name, phone, address, landmark, pinCode }) => {
@@ -387,7 +437,7 @@ export const PlatformProvider = ({ children }) => {
     setCustomer(updatedLocally);
     setIsProfileModalDismissed(true);
     try {
-      localStorage.setItem('kalsen_customer_profile', JSON.stringify(updatedLocally));
+      localStorage.setItem('urban_customer_profile', JSON.stringify(updatedLocally));
     } catch (e) {}
 
     // Persist to backend MongoDB
@@ -405,7 +455,7 @@ export const PlatformProvider = ({ children }) => {
         const synced = formatCustomerData({ ...res.user, profileCompleted: true }, updatedLocally);
         setCustomer(synced);
         try {
-          localStorage.setItem('kalsen_customer_profile', JSON.stringify(synced));
+          localStorage.setItem('urban_customer_profile', JSON.stringify(synced));
         } catch (e) {}
         return synced;
       }
@@ -433,8 +483,16 @@ export const PlatformProvider = ({ children }) => {
   const logout = () => {
     setIsAuthenticated(false);
     setIsProfileModalDismissed(false);
-    localStorage.setItem('kalsen_is_authenticated', 'false');
-    localStorage.removeItem('kalsen_customer_profile');
+    clearTrackingData();
+    clearCart();
+    try {
+      sessionStorage.setItem('urban_is_authenticated', 'false');
+      sessionStorage.removeItem('urban_customer_profile');
+      sessionStorage.removeItem('urban_customer_cart');
+      localStorage.setItem('urban_is_authenticated', 'false');
+      localStorage.removeItem('urban_customer_profile');
+      localStorage.removeItem('urban_customer_cart');
+    } catch (e) {}
     setCustomer(EMPTY_GUEST_PROFILE);
     showToast('Logged Out', 'You have been signed out safely', 'info');
     setCustomerSubView('home');
@@ -449,7 +507,7 @@ export const PlatformProvider = ({ children }) => {
         selectedAddressId: addressId
       };
       try {
-        localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
+        localStorage.setItem('urban_customer_profile', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -477,7 +535,7 @@ export const PlatformProvider = ({ children }) => {
         selectedAddressId: setAsSelected ? newAddr.id : (prev.selectedAddressId || newAddr.id)
       };
       try {
-        localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
+        localStorage.setItem('urban_customer_profile', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -534,7 +592,7 @@ export const PlatformProvider = ({ children }) => {
         } catch (e) {}
       }
 
-      // Ensure KalsenOne delivery zone PIN 243641 is set
+      // Ensure UrbanOne delivery zone PIN 243641 is set
       const finalPin = '243641';
       const finalLocality = 'Ushait';
 
@@ -638,7 +696,7 @@ export const PlatformProvider = ({ children }) => {
         selectedAddressId: confirmedAddr.id
       };
       try {
-        localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
+        localStorage.setItem('urban_customer_profile', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -671,7 +729,7 @@ export const PlatformProvider = ({ children }) => {
         selectedAddressId: nextSelected
       };
       try {
-        localStorage.setItem('kalsen_customer_profile', JSON.stringify(updated));
+        localStorage.setItem('urban_customer_profile', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -690,7 +748,7 @@ export const PlatformProvider = ({ children }) => {
   // Active Cart State - Clean & live (no demo mock items)
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_customer_cart');
+      const saved = localStorage.getItem('urban_customer_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed?.items)) return parsed;
@@ -709,7 +767,7 @@ export const PlatformProvider = ({ children }) => {
   // Sync active cart to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('kalsen_customer_cart', JSON.stringify(cart));
+      localStorage.setItem('urban_customer_cart', JSON.stringify(cart));
     } catch (e) {}
   }, [cart]);
 
@@ -820,7 +878,7 @@ export const PlatformProvider = ({ children }) => {
       deliveryInstructions: ""
     });
     try {
-      localStorage.removeItem('kalsen_customer_cart');
+      localStorage.removeItem('urban_customer_cart');
     } catch (e) {}
   };
 
@@ -859,7 +917,7 @@ export const PlatformProvider = ({ children }) => {
     // If paid via wallet, check and deduct
     if (paymentMethod.includes('Wallet')) {
       if ((customer?.walletBalance || 0) < grandTotal) {
-        showToast('Insufficient Balance', 'Please top up your Kalsen Wallet or choose UPI/Card', 'error');
+        showToast('Insufficient Balance', 'Please top up your Urban Wallet or choose UPI/Card', 'error');
         return null;
       }
       setCustomer(prev => ({ ...prev, walletBalance: (prev.walletBalance || 0) - grandTotal }));
@@ -878,12 +936,19 @@ export const PlatformProvider = ({ children }) => {
     const newOrderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
     const randomOtp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
+    const customerId = customer?.id || customer?._id || '';
+    const customerEmail = (customer?.email || '').trim().toLowerCase();
+    const customerPhone = customer?.phone || '';
+    const customerName = customer?.name || 'Customer';
+
     const newOrder = {
       id: newOrderId,
-      customerName: customer?.name || "Customer",
-      customerPhone: customer?.phone || "+91 98765 43210",
+      customerId,
+      customerEmail,
+      customerName,
+      customerPhone,
       merchantId: merchant.id || "m1",
-      merchantName: merchant.name || "Kalsen Kitchen",
+      merchantName: merchant.name || "Urban Kitchen",
       merchantCoords: merchant.coordinates || { x: 50, y: 50 },
       riderId: null,
       riderName: null,
@@ -912,13 +977,15 @@ export const PlatformProvider = ({ children }) => {
     updateActiveTrackingOrderId(newOrderId);
     clearCart();
 
-    // Persist order in SQLite Database asynchronously
+    // Persist order in MongoDB / Backend asynchronously
     api.placeOrder({
       id: newOrderId,
+      customerId,
+      customerEmail,
       merchantId: merchant.id,
       items: cart.items,
-      customerName: customer.name,
-      customerPhone: customer.phone,
+      customerName,
+      customerPhone,
       deliveryAddress: `${selectedAddr.street}, ${selectedAddr.landmark}`,
       itemTotal,
       taxes,
@@ -926,7 +993,7 @@ export const PlatformProvider = ({ children }) => {
       discountAmount: discount + loyaltyDiscount,
       grandTotal,
       deliveryOtp: randomOtp
-    }).catch(err => console.warn('[SQLite DB Sync] Order save:', err.message));
+    }).catch(err => console.warn('[Backend Sync] Order save:', err.message));
 
     // Trigger celebration & audio
     confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
@@ -1285,7 +1352,7 @@ export const PlatformProvider = ({ children }) => {
       const res = await api.pinMerchantToTop(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[SQLite DB Sync Pin Top]', err.message);
@@ -1326,7 +1393,7 @@ export const PlatformProvider = ({ children }) => {
       const res = await api.moveMerchantRank(merchantId, direction);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[SQLite DB Sync Move Rank]', err.message);
@@ -1353,7 +1420,7 @@ export const PlatformProvider = ({ children }) => {
       const res = await api.toggleMerchantPromoted(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[SQLite DB Sync Promoted]', err.message);
@@ -1372,7 +1439,7 @@ export const PlatformProvider = ({ children }) => {
       const res = await api.toggleMerchantFeatured(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[SQLite DB Sync Featured]', err.message);
@@ -1400,7 +1467,7 @@ export const PlatformProvider = ({ children }) => {
         const res = await api.updateMerchantBoostScore(merchantId, numScore);
         if (res?.merchants) {
           setMerchants(res.merchants);
-          localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+          localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
         }
       } catch (err) {
         console.warn('[SQLite DB Sync Boost Score]', err.message);
@@ -1423,7 +1490,7 @@ export const PlatformProvider = ({ children }) => {
       const res = await api.updateMerchantApproval(merchantId, status);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[SQLite DB Sync Approval]', err.message);

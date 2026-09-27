@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../context/PlatformContext';
-import { KalsenLogo } from '../common/KalsenLogo';
+import { UrbanLogo } from '../common/UrbanLogo';
 import { api } from '../../services/api';
 import confetti from 'canvas-confetti';
 import {
@@ -38,7 +38,7 @@ export const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [referralCode, setReferralCode] = useState('KALSEN50');
+  const [referralCode, setReferralCode] = useState('URBAN50');
   const [agreedToTerms, setAgreedToTerms] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -117,7 +117,7 @@ export const RegisterPage = () => {
       });
 
       playSound('success');
-      showToast('Account Created! 🎉', 'Welcome to KalsenOne! Profile completed & ₹150 welcome bonus credited.', 'success');
+      showToast('Account Created! 🎉', 'Welcome to UrbanOne! Profile completed & ₹150 welcome bonus credited.', 'success');
       if (cart?.items?.length > 0) {
         setCustomerSubView('cart');
       } else {
@@ -184,9 +184,9 @@ export const RegisterPage = () => {
           <div
             onClick={() => setCustomerSubView('landing')}
             className="cursor-pointer inline-block"
-            title="KalsenOne - Landing Page"
+            title="UrbanOne - Landing Page"
           >
-            <KalsenLogo size="lg" showSubtitle={true} />
+            <UrbanLogo size="lg" showSubtitle={true} />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 font-['Outfit'] tracking-tight pt-2">
             Create Foodie Account
@@ -205,7 +205,7 @@ export const RegisterPage = () => {
               <Gift className="w-5 h-5 text-amber-200 flex-shrink-0 animate-bounce" />
               <div>
                 <div className="text-xs font-black">₹150 Welcome Credit Applied</div>
-                <div className="text-[10px] text-orange-100">Code: KALSEN50 • Valid on your first 3 orders</div>
+                <div className="text-[10px] text-orange-100">Code: URBAN50 • Valid on your first 3 orders</div>
               </div>
             </div>
             <span className="px-2.5 py-1 rounded-xl bg-white/20 text-white font-black text-[10px] backdrop-blur-sm">
@@ -329,7 +329,7 @@ export const RegisterPage = () => {
                   <option value="Mandi Gate & Sabzi Bazar">Mandi Gate & Sabzi Bazar</option>
                   <option value="Civil Lines Residential Area">Civil Lines Residential Area</option>
                   <option value="Near Ushait Government Hospital">Near Ushait Government Hospital</option>
-                  <option value="Kalsen Central Hub, Ushait">Kalsen Central Hub, Ushait</option>
+                  <option value="Urban Central Hub, Ushait">Urban Central Hub, Ushait</option>
                 </select>
               </div>
             </div>
@@ -404,7 +404,7 @@ export const RegisterPage = () => {
                 <Gift className="w-4 h-4 text-[#f97316] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="KALSEN50"
+                  placeholder="URBAN50"
                   value={referralCode}
                   onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
                   className="w-full bg-orange-50/50 border border-orange-200 rounded-2xl pl-10 pr-24 py-3 text-xs sm:text-sm text-zinc-900 font-mono font-black focus:outline-none focus:border-orange-500"
@@ -500,7 +500,7 @@ export const RegisterPage = () => {
                   <h3 className="text-sm font-extrabold text-zinc-950 font-['Outfit']">
                     Sign up with Google
                   </h3>
-                  <p className="text-[10px] text-zinc-500 font-medium">to register for KalsenOne Food</p>
+                  <p className="text-[10px] text-zinc-500 font-medium">to register for UrbanOne Food</p>
                 </div>
               </div>
               <button

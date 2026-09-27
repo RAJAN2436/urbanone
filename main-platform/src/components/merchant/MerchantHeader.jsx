@@ -44,7 +44,7 @@ export const MerchantHeader = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-lg text-white font-['Outfit'] tracking-tight">
-                  Kalsen<span className="text-amber-400">Partner</span>
+                  Urban<span className="text-amber-400">Partner</span>
                 </span>
                 <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
                   Merchant OS

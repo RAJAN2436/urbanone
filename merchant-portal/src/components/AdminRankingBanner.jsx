@@ -52,7 +52,7 @@ export const AdminRankingBanner = () => {
     }
 
     if (showToast) showToast('Uploading Banner... ☁️', 'Uploading banner to Cloudinary CDN', 'info');
-    const url = await uploadBannerImage(file, 'kalsen-platform/banners');
+    const url = await uploadBannerImage(file, 'urban-platform/banners');
     if (url) {
       setSelectedBanner(url);
       if (showToast) showToast('Banner Uploaded! ✅', 'Saved to Cloudinary. Click "Save & Set Cover" to apply.', 'success');

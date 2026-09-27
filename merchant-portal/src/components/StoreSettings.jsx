@@ -425,7 +425,7 @@ export const StoreSettings = () => {
               <Tag className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input
                 type="text"
-                placeholder="e.g. 20% OFF UPTO ₹100 | USE KALSEN50"
+                placeholder="e.g. 20% OFF UPTO ₹100 | USE URBAN50"
                 value={formData.offers}
                 onChange={(e) => setFormData({ ...formData, offers: e.target.value })}
                 style={{ paddingLeft: '2.5rem' }}

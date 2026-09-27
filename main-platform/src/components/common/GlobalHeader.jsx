@@ -29,22 +29,20 @@ export const GlobalHeader = () => {
         {/* Brand */}
         <div className="flex items-center justify-between w-full sm:w-auto gap-4">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setActiveApp('customer'); setCustomerSubView('home'); }}>
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-500 to-[#ea580c] p-0.5 shadow-md flex items-center justify-center">
-              <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center font-black text-xl text-[#f97316] tracking-tighter">
-                K1
-              </div>
+            <div className="w-10 h-10 rounded-2xl bg-zinc-950 p-1 shadow-md flex items-center justify-center border border-zinc-800">
+              <img src="/urbanone-logo.svg" alt="UrbanOne" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-lg tracking-tight text-zinc-950 font-['Outfit']">
-                  Kalsen<span className="text-[#f97316]">One</span>
+                  Urban<span className="text-[#f97316]">One</span>
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-widest">
                   {activeApp === 'admin' ? 'Admin Portal' : 'Customer App'}
                 </span>
               </div>
               <p className="text-[11px] text-zinc-500 font-medium hidden sm:block">
-                {activeApp === 'admin' ? 'KalsenOne Operations & Governance' : 'Hyperlocal Food & Express Delivery'}
+                {activeApp === 'admin' ? 'UrbanOne Operations & Governance' : 'Hyperlocal Food & Express Delivery'}
               </p>
             </div>
           </div>
@@ -59,7 +57,7 @@ export const GlobalHeader = () => {
           </button>
         </div>
 
-        {/* Clean 2-Portal Switcher: KalsenOne Customer vs KalsenOneCo Admin */}
+        {/* Clean 2-Portal Switcher: UrbanOne Customer vs UrbanOne Admin */}
         <div className="flex items-center gap-2 p-1 rounded-2xl bg-zinc-100 border border-zinc-200 shadow-inner">
           <button
             onClick={() => { setActiveApp('customer'); setCustomerSubView('home'); }}
@@ -70,7 +68,7 @@ export const GlobalHeader = () => {
             }`}
           >
             <ShoppingBag className="w-4 h-4 text-[#f97316]" />
-            <span>KalsenOne Customer</span>
+            <span>UrbanOne Customer</span>
             {totalCartCount > 0 && (
               <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#f97316] text-white font-extrabold">
                 {totalCartCount}
@@ -87,7 +85,7 @@ export const GlobalHeader = () => {
             }`}
           >
             <ShieldCheck className="w-4 h-4 text-purple-600" />
-            <span>KalsenOneCo Admin</span>
+            <span>UrbanOne Admin</span>
           </button>
         </div>
 

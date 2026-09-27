@@ -80,7 +80,7 @@ export const LandingPage = () => {
     },
     {
       q: 'Is there a welcome discount for new customers in Ushait?',
-      a: 'Yes! Use promo code KALSEN50 during checkout or account registration to get FLAT ₹150 OFF and free express delivery on your first order.'
+      a: 'Yes! Use promo code URBAN50 during checkout or account registration to get FLAT ₹150 OFF and free express delivery on your first order.'
     }
   ];
 
@@ -254,7 +254,7 @@ export const LandingPage = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* HOW KALSENONE WORKS (3 SIMPLE STEPS) */}
+      {/* HOW URBANONE WORKS (3 SIMPLE STEPS) */}
       {/* ========================================================================= */}
       <section className="p-6 sm:p-10 rounded-3xl bg-zinc-50 border border-zinc-200 space-y-8">
         <div className="text-center space-y-2 max-w-xl mx-auto">

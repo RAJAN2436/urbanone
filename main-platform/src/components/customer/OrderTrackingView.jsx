@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../context/PlatformContext';
+import { isOrderOwnedByCustomer } from '../../utils/orderOwnership';
 import {
   ArrowLeft,
   CheckCircle,
@@ -17,6 +18,7 @@ import {
 
 export const OrderTrackingView = () => {
   const {
+    customer,
     activeTrackingOrderId,
     clearTrackingData,
     orders,
@@ -33,9 +35,14 @@ export const OrderTrackingView = () => {
   const [reviewTags, setReviewTags] = useState(['Hot & Fresh', 'Fast Delivery']);
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
-  // Only track the designated order or any actively in-progress order (not delivered/cancelled)
-  const order = (activeTrackingOrderId ? orders.find(o => o.id === activeTrackingOrderId) : null)
-    || orders.find(o => o.orderStatus !== 'delivered' && o.orderStatus !== 'cancelled');
+  // Filter orders strictly belonging to current logged-in customer
+  const userOrders = Array.isArray(orders)
+    ? orders.filter(o => isOrderOwnedByCustomer(o, customer))
+    : [];
+
+  // Only track the designated order or user's active in-progress order
+  const order = (activeTrackingOrderId ? userOrders.find(o => o.id === activeTrackingOrderId) : null)
+    || userOrders.find(o => o.orderStatus !== 'delivered' && o.orderStatus !== 'cancelled');
   const merchant = merchants.find(m => m.id === order?.merchantId) || merchants[0];
   const rider = riders.find(r => r.id === order?.riderId || (order?.riderName && r.name && r.name.toLowerCase().includes(order.riderName.toLowerCase()))) || riders[0];
 

@@ -446,7 +446,7 @@ export default function RiderProfileView({ onPlayLanding }) {
                 <Phone className="w-4 h-4" /> Dial National Emergency (112)
               </a>
               <a href="tel:9876543210" className="w-full py-3 rounded-2xl bg-zinc-900 text-white font-bold text-xs flex items-center justify-center gap-2">
-                <Phone className="w-4 h-4" /> Call Kalsen Dispatch Team
+                <Phone className="w-4 h-4" /> Call UrbanOne Dispatch Team
               </a>
             </div>
             <button onClick={() => setSosModalOpen(false)} className="text-xs font-bold text-zinc-500 hover:text-zinc-800 cursor-pointer">Cancel Emergency</button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../context/PlatformContext';
-import { KalsenLogo } from '../common/KalsenLogo';
+import { UrbanLogo } from '../common/UrbanLogo';
 import { api } from '../../services/api';
 import {
   Mail,
@@ -176,9 +176,9 @@ export const LoginPage = () => {
           <div
             onClick={() => setCustomerSubView('landing')}
             className="cursor-pointer inline-block"
-            title="KalsenOne - Landing Page"
+            title="UrbanOne - Landing Page"
           >
-            <KalsenLogo size="lg" showSubtitle={true} />
+            <UrbanLogo size="lg" showSubtitle={true} />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 font-['Outfit'] tracking-tight pt-2">
             Welcome Back
@@ -289,23 +289,6 @@ export const LoginPage = () => {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 
-            {/* Quick Demo Fill Helper */}
-            <div className="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200/80 flex items-center justify-between text-xs">
-              <span className="text-zinc-600 text-[11px]">
-                Demo Account: <strong className="text-orange-700">aaditya@kalsen.one</strong>
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('aaditya@kalsen.one');
-                  setPassword('kalsen123');
-                }}
-                className="px-2.5 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-bold text-[10px] cursor-pointer transition-colors shadow-xs"
-              >
-                1-Click Fill
-              </button>
-            </div>
-
           </form>
 
           {/* Switch to Register */}
@@ -342,7 +325,7 @@ export const LoginPage = () => {
           <span>•</span>
           <div className="flex items-center gap-1">
             <CheckCircle className="w-3.5 h-3.5 text-[#f97316]" />
-            <span>Verified Kalsen Security</span>
+            <span>Verified Urban Security</span>
           </div>
         </div>
 
@@ -368,7 +351,7 @@ export const LoginPage = () => {
                   <h3 className="text-sm font-extrabold text-zinc-950 font-['Outfit']">
                     Sign in with Google
                   </h3>
-                  <p className="text-[10px] text-zinc-500 font-medium">to continue to KalsenOne Food</p>
+                  <p className="text-[10px] text-zinc-500 font-medium">to continue to UrbanOne Food</p>
                 </div>
               </div>
               <button

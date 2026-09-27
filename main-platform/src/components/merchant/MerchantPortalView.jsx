@@ -83,7 +83,7 @@ export const MerchantPortalView = () => {
       return;
     }
     if (showToast) showToast('Uploading Photo... ☁️', 'Saving dish photo to Cloudinary CDN', 'info');
-    const url = await uploadDishImage(file, 'kalsen-platform/dishes');
+    const url = await uploadDishImage(file, 'urban-platform/dishes');
     if (url) {
       setDishFormData(prev => ({ ...prev, image: url }));
       if (showToast) showToast('Photo Uploaded! ✅', 'Saved to Cloudinary CDN', 'success');

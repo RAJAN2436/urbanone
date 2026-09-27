@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../context/PlatformContext';
-import { KalsenLogo } from '../common/KalsenLogo';
+import { UrbanLogo } from '../common/UrbanLogo';
 import { DeliveryEmblem } from '../common/DeliveryEmblem';
 import {
   Search,
@@ -36,7 +36,7 @@ export const CustomerHome = () => {
   const categories = [
     { id: 'All', name: 'All Cravings', icon: '✨' },
     { id: 'Food', name: 'Food Delivery', icon: '🍕' },
-    { id: 'Grocery', name: 'Kalsen Mart 15m', icon: '🥑' },
+    { id: 'Grocery', name: 'Urban Mart 15m', icon: '🥑' },
     { id: 'Pharmacy', name: '24x7 Express Meds', icon: '💊' },
     { id: 'Gourmet', name: 'Gourmet & Cafes', icon: '☕' },
     { id: 'Desserts', name: 'Bakes & Sweets', icon: '🍰' }
@@ -221,7 +221,7 @@ export const CustomerHome = () => {
           {/* Admin Priority Ranking Indicator */}
           <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-orange-50 border border-orange-200/80 text-[10px] sm:text-[11px] font-bold text-[#ea580c] self-start sm:self-auto">
             <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#f97316]" />
-            <span>Ranked by Kalsen Algorithm</span>
+            <span>Ranked by Urban Algorithm</span>
           </div>
         </div>
 
@@ -232,7 +232,7 @@ export const CustomerHome = () => {
             </div>
             <h4 className="text-base font-extrabold text-zinc-900 font-['Outfit']">No Stores Listed Yet</h4>
             <p className="text-xs text-zinc-500 max-w-md mx-auto leading-relaxed">
-              Stores registered on the <strong>Kalsen Partner Merchant Portal</strong> will appear here automatically with their live menus.
+              Stores registered on the <strong>Urban Partner Merchant Portal</strong> will appear here automatically with their live menus.
             </p>
           </div>
         ) : (

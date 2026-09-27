@@ -44,7 +44,7 @@ export const GoogleMapView = ({
   const handleToggleMapMode = () => {
     setMapMode(prev => {
       const next = prev === 'vector' ? 'google_live' : prev === 'google_live' ? 'satellite' : 'vector';
-      try { localStorage.setItem('kalsen_rider_map_mode', next); } catch (e) {}
+      try { localStorage.setItem('urban_rider_map_mode', next); } catch (e) {}
       return next;
     });
   };
@@ -52,7 +52,7 @@ export const GoogleMapView = ({
   const [apiKey] = useState(() => {
     try {
       const envKey = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GOOGLE_MAPS_API_KEY : '';
-      const stored = localStorage.getItem('kalsen_google_maps_api_key');
+      const stored = localStorage.getItem('urban_google_maps_api_key');
       return (envKey && String(envKey).trim()) || stored || '';
     } catch (e) {
       return '';
@@ -72,7 +72,7 @@ export const GoogleMapView = ({
 
   // Ushait coordinates
   const merchantLocation = {
-    name: currentOrder?.merchantName || targetName || 'Kalsen Kitchen Ushait',
+    name: currentOrder?.merchantName || targetName || 'Urban Kitchen Ushait',
     address: currentOrder?.pickupAddress || address || 'Clock Tower Chowk, Ushait (243641)',
     lat: currentOrder?.merchantLocation?.lat || (targetType === 'merchant' && targetLocation?.lat) || 27.8062,
     lng: currentOrder?.merchantLocation?.lng || (targetType === 'merchant' && targetLocation?.lng) || 79.2895
@@ -294,7 +294,7 @@ export const GoogleMapView = ({
 
   const handleSaveApiKey = () => {
     if (!tempKey.trim()) return;
-    localStorage.setItem('kalsen_google_maps_api_key', tempKey.trim());
+    localStorage.setItem('urban_google_maps_api_key', tempKey.trim());
     setApiKey(tempKey.trim());
     setShowKeyConfig(false);
   };

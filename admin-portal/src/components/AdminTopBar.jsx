@@ -48,10 +48,10 @@ export const AdminTopBar = () => {
         {/* Admin Profile Pill */}
         <div className="flex items-center gap-2.5 pl-2 border-l border-zinc-200">
           <div className="w-8 h-8 rounded-full bg-orange-100 border border-orange-200 text-[#ea580c] font-black text-xs flex items-center justify-center shadow-sm">
-            AD
+            UO
           </div>
           <div className="text-left hidden lg:block text-xs">
-            <div className="font-extrabold text-zinc-900">Admin Console</div>
+            <div className="font-extrabold text-zinc-900">UrbanOne Admin</div>
             <div className="text-[10px] text-zinc-500 font-medium">Head of Operations</div>
           </div>
         </div>

@@ -23,6 +23,8 @@ export const ORDER_STATUSES = [
 
 const orderSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true, index: true },
+  customer_id: { type: String, default: null, index: true },
+  customer_email: { type: String, default: null, index: true },
   customer_name: { type: String, default: 'Customer' },
   customer_phone: { type: String },
   merchant_id: { type: String, index: true },

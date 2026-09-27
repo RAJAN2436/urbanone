@@ -9,7 +9,7 @@ export const dispatchTwilioSms = async (cleanPhone, otpCode) => {
     fromNumber = fromNumber.length === 10 ? `+91${fromNumber}` : `+${fromNumber}`;
   }
   const formattedTo = `+91${cleanPhone}`;
-  const messageBody = `Your KalsenOne verification code is ${otpCode}. Valid for 5 minutes. Do not share this OTP with anyone. - KALSEN USHAIT`;
+  const messageBody = `Your UrbanOne verification code is ${otpCode}. Valid for 5 minutes. Do not share this OTP with anyone. - URBANONE USHAIT`;
 
   console.log(`=======================================================`);
   console.log(`📲 [TWILIO SMS GATEWAY DISPATCH]`);

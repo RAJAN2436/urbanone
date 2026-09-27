@@ -12,7 +12,7 @@ export const InteractiveMap = ({
 }) => {
   const [mapView, setMapView] = useState(() => {
     try {
-      return localStorage.getItem('kalsen_interactive_map_view') || 'vector';
+      return localStorage.getItem('urban_interactive_map_view') || 'vector';
     } catch (e) {
       return 'vector';
     }
@@ -21,7 +21,7 @@ export const InteractiveMap = ({
   const handleToggleMapView = () => {
     setMapView(prev => {
       const next = prev === 'vector' ? 'google' : prev === 'google' ? 'satellite' : 'vector';
-      try { localStorage.setItem('kalsen_interactive_map_view', next); } catch (e) {}
+      try { localStorage.setItem('urban_interactive_map_view', next); } catch (e) {}
       return next;
     });
   };

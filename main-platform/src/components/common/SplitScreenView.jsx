@@ -20,7 +20,7 @@ export const SplitScreenView = () => {
           </div>
           <div>
             <h2 className="text-base font-extrabold text-white">
-              KalsenOne Synchronized Ecosystem Mode
+              UrbanOne Synchronized Ecosystem Mode
             </h2>
             <p className="text-xs text-slate-300">
               Watch real-time live events flow simultaneously across Customer, Merchant Kitchen, Rider, and Admin Command Center!
@@ -40,12 +40,12 @@ export const SplitScreenView = () => {
       {/* 2x2 Synchronized Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         
-        {/* Panel 1: Customer App (KalsenOne) */}
+        {/* Panel 1: Customer App (UrbanOne) */}
         <div className="rounded-3xl bg-slate-950 border border-indigo-500/30 shadow-2xl flex flex-col overflow-hidden">
           <div className="px-4 py-3 bg-indigo-950/60 border-b border-indigo-900/60 flex items-center justify-between">
             <div className="flex items-center gap-2 text-indigo-300 font-extrabold text-xs">
               <ShoppingBag className="w-4 h-4" />
-              <span>1. KalsenOne (Customer App)</span>
+              <span>1. UrbanOne (Customer App)</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">
               Live Client
@@ -56,12 +56,12 @@ export const SplitScreenView = () => {
           </div>
         </div>
 
-        {/* Panel 2: Merchant Portal (KalsenOneMerchant) */}
+        {/* Panel 2: Merchant Portal (UrbanOne Merchant) */}
         <div className="rounded-3xl bg-slate-950 border border-amber-500/30 shadow-2xl flex flex-col overflow-hidden">
           <div className="px-4 py-3 bg-amber-950/60 border-b border-amber-900/60 flex items-center justify-between">
             <div className="flex items-center gap-2 text-amber-300 font-extrabold text-xs">
               <Store className="w-4 h-4" />
-              <span>2. KalsenOneMerchant (Kitchen KDS & Portal)</span>
+              <span>2. UrbanOne Merchant (Kitchen KDS & Portal)</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">
               Live Kitchen
@@ -72,12 +72,12 @@ export const SplitScreenView = () => {
           </div>
         </div>
 
-        {/* Panel 3: Rider App (KalsenOneRider) */}
+        {/* Panel 3: Rider App (UrbanOne Rider) */}
         <div className="rounded-3xl bg-slate-950 border border-sky-500/30 shadow-2xl flex flex-col overflow-hidden">
           <div className="px-4 py-3 bg-sky-950/60 border-b border-sky-900/60 flex items-center justify-between">
             <div className="flex items-center gap-2 text-sky-300 font-extrabold text-xs">
               <Bike className="w-4 h-4" />
-              <span>3. KalsenOneRider (Dispatch & GPS Navigation)</span>
+              <span>3. UrbanOne Rider (Dispatch & GPS Navigation)</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300">
               Live Rider
@@ -88,12 +88,12 @@ export const SplitScreenView = () => {
           </div>
         </div>
 
-        {/* Panel 4: Admin Command Center (KalsenOneCo) */}
+        {/* Panel 4: Admin Command Center (UrbanOne Admin) */}
         <div className="rounded-3xl bg-slate-950 border border-purple-500/30 shadow-2xl flex flex-col overflow-hidden">
           <div className="px-4 py-3 bg-purple-950/60 border-b border-purple-900/60 flex items-center justify-between">
             <div className="flex items-center gap-2 text-purple-300 font-extrabold text-xs">
               <ShieldCheck className="w-4 h-4" />
-              <span>4. KalsenOneCo (Admin Operations War Room)</span>
+              <span>4. UrbanOne Admin (Command Center & Fleet HQ)</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
               War Room

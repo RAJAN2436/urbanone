@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../context/PlatformContext';
-import { KalsenLogo } from '../common/KalsenLogo';
+import { UrbanLogo } from '../common/UrbanLogo';
 import { AddressLocationModal } from './AddressLocationModal';
+import { isOrderOwnedByCustomer } from '../../utils/orderOwnership';
 import {
   MapPin,
   ShoppingBag,
@@ -50,7 +51,10 @@ export const CustomerHeader = () => {
     ? customer.addresses
     : [{ id: "a1", tag: "Home", street: "Main Market Road", landmark: "Ushait" }];
   const selectedAddress = safeAddresses.find(a => a.id === customer?.selectedAddressId) || safeAddresses[0];
-  const activeOrder = Array.isArray(orders) ? orders.find(o => o.orderStatus !== 'delivered' && o.orderStatus !== 'cancelled') : null;
+  // Only find active orders belonging strictly to the currently logged in customer
+  const activeOrder = (isAuthenticated && customer && Array.isArray(orders))
+    ? orders.find(o => o && o.orderStatus !== 'delivered' && o.orderStatus !== 'cancelled' && isOrderOwnedByCustomer(o, customer))
+    : null;
 
   const handleNavClick = (view) => {
     if (view === 'tracking') {
@@ -76,9 +80,9 @@ export const CustomerHeader = () => {
             <div
               onClick={() => handleNavClick('landing')}
               className="cursor-pointer flex-shrink-0"
-              title="KalsenOne - Landing Page"
+              title="UrbanOne - Landing Page"
             >
-              <KalsenLogo size="sm" showSubtitle={false} />
+              <UrbanLogo size="sm" showSubtitle={false} />
             </div>
 
             {/* Delivery Address Pill with 1-click GPS detection & Address Selector */}

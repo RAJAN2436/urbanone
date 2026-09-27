@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { usePlatform } from '../../context/PlatformContext';
 import { useCloudinaryUpload } from '../../hooks/useCloudinaryUpload';
+import { isOrderOwnedByCustomer } from '../../utils/orderOwnership';
 import {
   Wallet,
   Award,
@@ -52,7 +53,7 @@ export const CustomerProfile = () => {
       return;
     }
     if (showToast) showToast('Uploading Photo... ☁️', 'Saving profile photo to Cloudinary CDN', 'info');
-    const url = await uploadAvatar(file, 'kalsen-platform/customers');
+    const url = await uploadAvatar(file, 'urban-one-platform/customers');
     if (url) {
       setCustomer(prev => ({
         ...prev,
@@ -88,7 +89,7 @@ export const CustomerProfile = () => {
       ...prev,
       walletBalance: prev.walletBalance + topUpAmount
     }));
-    showToast('Wallet Reloaded', `Added ₹${topUpAmount} to your Kalsen Wallet`, 'success');
+    showToast('Wallet Reloaded', `Added ₹${topUpAmount} to your Urban Wallet`, 'success');
     setIsAddingMoney(false);
   };
 
@@ -128,23 +129,9 @@ export const CustomerProfile = () => {
   const safeName = customer?.name || 'Guest';
   const safeAddresses = Array.isArray(customer?.addresses) ? customer.addresses : [];
   
-  // Only genuine orders placed by the current user (no default/mock orders)
+  // Only genuine orders placed by the current user (no default/mock orders or other users' orders)
   const safeOrders = Array.isArray(orders) 
-    ? orders.filter(ord => {
-        if (!ord) return false;
-        if (ord.id?.startsWith('ORD-88') || ord.id?.startsWith('ORD-9162') || ord.id?.startsWith('ORD-8671') || ord.id?.startsWith('demo-') || ord.id?.startsWith('mock-')) {
-          return false;
-        }
-        if (customer?.phone || customer?.email || customer?.id) {
-          const userPhone = (customer.phone || '').replace(/\D/g, '');
-          const orderPhone = (ord.customerPhone || '').replace(/\D/g, '');
-          const matchPhone = Boolean(userPhone && orderPhone && (userPhone.includes(orderPhone) || orderPhone.includes(userPhone)));
-          const matchEmail = Boolean(customer.email && ord.customerEmail && ord.customerEmail.toLowerCase() === customer.email.toLowerCase());
-          const matchId = Boolean(customer.id && (ord.customerId === customer.id || ord.customer_id === customer.id));
-          return matchPhone || matchEmail || matchId;
-        }
-        return false;
-      })
+    ? orders.filter(ord => isOrderOwnedByCustomer(ord, customer))
     : [];
 
   return (
@@ -219,12 +206,12 @@ export const CustomerProfile = () => {
       {/* Wallet & Referral Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        {/* Kalsen Prepaid Wallet */}
+        {/* Urban Prepaid Wallet */}
         <div className="p-6 rounded-3xl bg-white border border-zinc-200 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-[#ea580c] font-bold text-xs uppercase tracking-wider">
               <Wallet className="w-4 h-4 text-[#f97316]" />
-              <span>Kalsen 1-Tap Wallet</span>
+              <span>Urban 1-Tap Wallet</span>
             </div>
             <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-orange-100 text-[#ea580c]">
               Active
@@ -278,7 +265,7 @@ export const CustomerProfile = () => {
             </div>
             <h4 className="text-base font-bold text-zinc-950 mt-2">Get ₹50 for every foodie friend</h4>
             <p className="text-xs text-zinc-600 mt-1 font-medium leading-relaxed">
-              Your friend gets flat 50% off on their first feast, and you get ₹50 directly in your Kalsen wallet!
+              Your friend gets flat 50% off on their first feast, and you get ₹50 directly in your Urban wallet!
             </p>
           </div>
 

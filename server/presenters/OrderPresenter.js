@@ -49,6 +49,8 @@ export const OrderPresenter = {
     try {
       const {
         id,
+        customerId,
+        customerEmail,
         merchantId,
         items,
         customerName,
@@ -75,10 +77,12 @@ export const OrderPresenter = {
 
       const newOrder = await database.createOrder({
         id: orderId,
-        customerName: customerName || 'Aaditya Sharma',
-        customerPhone: customerPhone || '+91 98450 11223',
+        customerId: customerId || null,
+        customerEmail: customerEmail || null,
+        customerName: customerName || 'Customer',
+        customerPhone: customerPhone || '',
         merchantId: merchant?.id || 'm1',
-        merchantName: merchant?.name || 'Kalsen Kitchen Ushait',
+        merchantName: merchant?.name || 'Urban Kitchen Ushait',
         riderId: null,
         riderName: null,
         riderPhone: null,

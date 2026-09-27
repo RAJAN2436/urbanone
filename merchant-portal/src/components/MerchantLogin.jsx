@@ -94,7 +94,7 @@ export const MerchantLogin = () => {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 font-['Outfit'] tracking-tight">
-              Kalsen<span className="text-[#f97316]">Partner</span>
+              Urban<span className="text-[#f97316]">Partner</span>
             </h1>
             <p className="text-xs text-zinc-500 font-medium mt-0.5">
               Merchant OS • Kitchen & Store Management Portal

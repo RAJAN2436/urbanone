@@ -1,4 +1,4 @@
-// Dataset for KalsenOne Main Customer Platform (100% MongoDB Driven)
+// Dataset for UrbanOne Main Customer Platform (100% MongoDB Driven)
 // All data (merchants, dishes, orders, riders, surge zones, promos) is loaded directly from MongoDB
 
 export const INITIAL_MERCHANTS = [];

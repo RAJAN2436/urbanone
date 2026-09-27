@@ -29,7 +29,7 @@ export class ErrorBoundary extends React.Component {
     this.setState({ hasError: false, error: null, errorInfo: null });
     if (typeof window !== 'undefined') {
       try {
-        localStorage.removeItem('kalsen_customer_subview');
+        localStorage.removeItem('urban_customer_subview');
       } catch (e) {
         // ignore
       }

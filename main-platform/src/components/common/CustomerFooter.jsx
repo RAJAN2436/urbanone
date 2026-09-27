@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlatform } from '../../context/PlatformContext';
-import { KalsenLogo } from './KalsenLogo';
+import { UrbanLogo } from './UrbanLogo';
 import {
   Heart,
   ShieldCheck,
@@ -44,9 +44,9 @@ export const CustomerFooter = () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="cursor-pointer inline-block"
-              title="KalsenOne - Landing Page"
+              title="UrbanOne - Landing Page"
             >
-              <KalsenLogo size="md" showSubtitle={true} />
+              <UrbanLogo size="md" showSubtitle={true} />
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed max-w-sm">
@@ -135,7 +135,7 @@ export const CustomerFooter = () => {
                   }}
                   className="hover:text-[#f97316] transition-colors cursor-pointer"
                 >
-                  Kalsen Gold VIP Rewards
+                  Urban Gold VIP Rewards
                 </button>
               </li>
             </ul>
@@ -183,14 +183,14 @@ export const CustomerFooter = () => {
               Company
             </h4>
             <ul className="space-y-2 text-zinc-600 font-medium">
-              <li className="hover:text-zinc-900 cursor-pointer">About KalsenOne</li>
+              <li className="hover:text-zinc-900 cursor-pointer">About UrbanOne</li>
               <li className="hover:text-zinc-900 cursor-pointer flex items-center gap-1">
                 <span>Careers</span>
                 <span className="bg-orange-100 text-[#ea580c] text-[9px] px-1.5 py-0.2 rounded font-black">WE'RE HIRING</span>
               </li>
               <li className="hover:text-zinc-900 cursor-pointer">Press & Media Kit</li>
               <li className="hover:text-zinc-900 cursor-pointer">Zero-Carbon EV Fleet Initiative</li>
-              <li className="hover:text-zinc-900 cursor-pointer">Kalsen Foundation</li>
+              <li className="hover:text-zinc-900 cursor-pointer">UrbanOne Foundation</li>
             </ul>
           </div>
 
@@ -202,7 +202,7 @@ export const CustomerFooter = () => {
             <div className="space-y-2 text-zinc-600 font-medium">
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#f97316] flex-shrink-0" />
-                <span className="truncate">support@kalsen.one</span>
+                <span className="truncate">support@urbanone.app</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#f97316] flex-shrink-0" />
@@ -239,7 +239,7 @@ export const CustomerFooter = () => {
         {/* Bottom Copyright & Compliance */}
         <div className="pt-6 border-t border-zinc-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-zinc-500">
           <div className="flex items-center gap-2">
-            <span>© {new Date().getFullYear()} KalsenOne Platform Inc. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} UrbanOne Platform Inc. All rights reserved.</span>
             <span>•</span>
             <span className="flex items-center gap-1">
               Made with <Heart className="w-3 h-3 text-rose-500 fill-current" /> in Ushait

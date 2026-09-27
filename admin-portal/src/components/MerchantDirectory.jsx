@@ -59,7 +59,7 @@ export const MerchantDirectory = () => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const url = await uploadImage(file, 'kalsen-platform/merchants');
+      const url = await uploadImage(file, 'urban-platform/merchants');
       if (url) {
         setCustomImage(url);
       }

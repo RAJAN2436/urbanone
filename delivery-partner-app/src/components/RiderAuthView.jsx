@@ -74,7 +74,7 @@ export default function RiderAuthView() {
         return;
       }
       showToast('Uploading Photo... ☁️', 'Saving photo to Cloudinary CDN', 'info');
-      const url = await uploadImage(file, 'kalsen-platform/riders');
+      const url = await uploadImage(file, 'urban-platform/riders');
       if (url) {
         setPhoto(url);
         showToast('Photo Uploaded! ✅', 'Profile photo saved to Cloudinary', 'success');
@@ -106,7 +106,7 @@ export default function RiderAuthView() {
     setIsSubmitting(false);
 
     if (result?.success) {
-      showToast('Application Sent! 📋', 'Waiting for Kalsen Admin approval', 'success');
+      showToast('Application Sent! 📋', 'Waiting for Urban Admin approval', 'success');
     } else if (result?.message?.toLowerCase().includes('already exists')) {
       showToast('Account Exists 🔑', 'You already have an account! Please sign in with your password.', 'info');
       setLoginIdentifier(phone.trim() || email.trim());
@@ -140,7 +140,7 @@ export default function RiderAuthView() {
     if (res?.rider?.approvalStatus === 'approved' || res?.rider?.kycVerified) {
       showToast('Approved! 🎉', 'Your application is approved. Welcome to the fleet!', 'success');
     } else {
-      showToast('Still Pending', 'Application is under review by Kalsen Fleet Admin', 'info');
+      showToast('Still Pending', 'Application is under review by Urban Fleet Admin', 'info');
     }
   };
 
@@ -169,7 +169,7 @@ export default function RiderAuthView() {
               Application Under Review
             </h2>
             <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-              Your registration request and Driving License have been sent to the Kalsen Fleet Admin.
+              Your registration request and Driving License have been sent to the Urban Fleet Admin.
             </p>
           </div>
 

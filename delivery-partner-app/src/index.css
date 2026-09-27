@@ -9,14 +9,22 @@
   --primary-orange-hover: #ea580c;
 }
 
-body {
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   font-family: var(--font-body);
   background-color: #09090b;
   color: #f4f4f5;
-  min-height: 100vh;
-  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

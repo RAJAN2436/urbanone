@@ -70,7 +70,7 @@ app.use('/api', apiRoutes);
 // Root Welcome Endpoint
 app.get('/', (req, res) => {
   res.json({
-    platform: 'KalsenOne Hyperlocal Platform',
+    platform: 'UrbanOne Hyperlocal Platform',
     stack: 'MERN Stack (MongoDB, Express, React, Node.js)',
     architecture: 'MVP (Model-View-Presenter)',
     status: 'online',
@@ -92,7 +92,7 @@ export {
 // Start Server & Connect MongoDB
 server.listen(PORT, '0.0.0.0', async () => {
   console.log(`=======================================================`);
-  console.log(`🚀 KalsenOne MERN Stack Backend running on http://localhost:${PORT}`);
+  console.log(`🚀 UrbanOne MERN Stack Backend running on http://localhost:${PORT}`);
   console.log(`📐 Architecture: MVP (Model-View-Presenter)`);
   console.log(`⚡ Socket.io Real-Time Engine Active`);
   console.log(`📍 Operating Zone: Ushait, UP`);

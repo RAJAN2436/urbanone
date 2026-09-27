@@ -94,7 +94,7 @@ export const AuthPresenter = {
 
       return res.json({
         success: true,
-        message: 'OTP verified successfully. Welcome to KalsenOne!',
+        message: 'OTP verified successfully. Welcome to UrbanOne!',
         token,
         user
       });
@@ -243,14 +243,14 @@ export const AuthPresenter = {
           loyaltyPoints: 200,
           tier: 'Gold VIP',
           streakCount: 1,
-          referralCode: `KALSEN-${Date.now().toString().slice(-4)}`
+          referralCode: `URBAN-${Date.now().toString().slice(-4)}`
         });
       }
 
-      const token = `kalsen_jwt_${crypto.randomBytes(16).toString('hex')}`;
+      const token = `urbanone_jwt_${crypto.randomBytes(16).toString('hex')}`;
       return res.json({
         success: true,
-        message: `Welcome to KalsenOne, ${user.name}!`,
+        message: `Welcome to UrbanOne, ${user.name}!`,
         token,
         user
       });

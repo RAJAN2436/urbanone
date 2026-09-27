@@ -17,7 +17,7 @@ export const useAdmin = () => {
 export const AdminProvider = ({ children }) => {
   const [merchants, setMerchants] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_merchants_data');
+      const saved = localStorage.getItem('urban_merchants_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -30,7 +30,7 @@ export const AdminProvider = ({ children }) => {
 
   const [riders, setRiders] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_riders_data');
+      const saved = localStorage.getItem('urban_riders_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -43,7 +43,7 @@ export const AdminProvider = ({ children }) => {
 
   const [surgeZones, setSurgeZones] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_surge_zones_data');
+      const saved = localStorage.getItem('urban_surge_zones_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -73,19 +73,19 @@ export const AdminProvider = ({ children }) => {
       if (merchantsRes.status === 'fulfilled') {
         const list = merchantsRes.value?.merchants || [];
         setMerchants(list);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(list)); } catch (e) {}
       }
 
       if (ridersRes.status === 'fulfilled') {
         const list = ridersRes.value?.riders || [];
         setRiders(list);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(list)); } catch (e) {}
       }
 
       if (zonesRes.status === 'fulfilled') {
         const list = zonesRes.value?.zones || [];
         setSurgeZones(list);
-        try { localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_surge_zones_data', JSON.stringify(list)); } catch (e) {}
       }
 
       if (ordersRes.status === 'fulfilled') {
@@ -111,7 +111,7 @@ export const AdminProvider = ({ children }) => {
       const list = Array.isArray(payload?.merchants) ? payload.merchants : (Array.isArray(payload) ? payload : null);
       if (list) {
         setMerchants(list);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(list));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(list));
       }
     });
 
@@ -124,7 +124,7 @@ export const AdminProvider = ({ children }) => {
       const list = Array.isArray(data?.riders) ? data.riders : (Array.isArray(data) ? data : null);
       if (list) {
         setRiders(list);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(list)); } catch (e) {}
       }
     });
 
@@ -141,15 +141,15 @@ export const AdminProvider = ({ children }) => {
 
   // Sync state across localStorage for cross-app synchronization
   useEffect(() => {
-    localStorage.setItem('kalsen_merchants_data', JSON.stringify(merchants));
+    localStorage.setItem('urban_merchants_data', JSON.stringify(merchants));
   }, [merchants]);
 
   useEffect(() => {
-    localStorage.setItem('kalsen_riders_data', JSON.stringify(riders));
+    localStorage.setItem('urban_riders_data', JSON.stringify(riders));
   }, [riders]);
 
   useEffect(() => {
-    localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(surgeZones));
+    localStorage.setItem('urban_surge_zones_data', JSON.stringify(surgeZones));
   }, [surgeZones]);
 
   const showToast = (title, message, type = 'info') => {
@@ -186,7 +186,7 @@ export const AdminProvider = ({ children }) => {
       if (res?.merchant) {
         const list = res.merchants || [...merchants, res.merchant];
         setMerchants(list);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(list)); } catch (e) {}
         confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
         playSound('success');
         showToast('Store Registered! 🏪', `"${res.merchant.name}" successfully registered in MongoDB`, 'success');
@@ -204,7 +204,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.deleteMerchant(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants)); } catch (e) {}
       } else {
         setMerchants(prev => prev.filter(m => m.id !== merchantId));
       }
@@ -240,7 +240,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.pinMerchantToTop(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync Pin Top]', err.message);
@@ -282,7 +282,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.moveMerchantRank(merchantId, direction);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync Move Rank]', err.message);
@@ -309,7 +309,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.toggleMerchantPromoted(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync Promoted]', err.message);
@@ -328,7 +328,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.toggleMerchantFeatured(merchantId);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync Featured]', err.message);
@@ -356,7 +356,7 @@ export const AdminProvider = ({ children }) => {
         const res = await api.updateMerchantBoostScore(merchantId, numScore);
         if (res?.merchants) {
           setMerchants(res.merchants);
-          localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+          localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
         }
       } catch (err) {
         console.warn('[Backend Sync Boost Score]', err.message);
@@ -377,7 +377,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.updateMerchantApproval(merchantId, status);
       if (res?.merchants) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync Approval]', err.message);
@@ -419,7 +419,7 @@ export const AdminProvider = ({ children }) => {
         const res = await api.updateMerchantRating(merchantId, numRating, newRatingCount);
         if (res?.merchants) {
           setMerchants(res.merchants);
-          localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+          localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
         }
       } catch (err) {
         console.warn('[Backend Sync Rating]', err.message);
@@ -437,7 +437,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.approveRiderKYC(riderId, true);
       if (res?.riders) {
         setRiders(res.riders);
-        localStorage.setItem('kalsen_riders_data', JSON.stringify(res.riders));
+        localStorage.setItem('urban_riders_data', JSON.stringify(res.riders));
       }
     } catch (err) {
       console.warn('[Backend Sync KYC]', err.message);
@@ -456,7 +456,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.updateRiderApproval(riderId, status);
       if (res?.riders) {
         setRiders(res.riders);
-        localStorage.setItem('kalsen_riders_data', JSON.stringify(res.riders));
+        localStorage.setItem('urban_riders_data', JSON.stringify(res.riders));
       }
     } catch (err) {
       console.warn('[Backend Sync Rider Approval]', err.message);
@@ -472,7 +472,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.updateSurgeMultiplier(zoneId, num);
       if (res?.zones) {
         setSurgeZones(res.zones);
-        localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(res.zones));
+        localStorage.setItem('urban_surge_zones_data', JSON.stringify(res.zones));
       }
     } catch (err) {
       console.warn('[Backend Sync Surge]', err.message);
@@ -484,7 +484,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.createRider(riderData);
       if (res?.riders) {
         setRiders(res.riders);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(res.riders)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(res.riders)); } catch (e) {}
         showToast('Rider Registered! 🛵', `Delivery partner ${riderData.name} saved in MongoDB`, 'success');
         return res.riders;
       }
@@ -501,7 +501,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.deleteRider(riderId);
       if (res?.riders) {
         setRiders(res.riders);
-        try { localStorage.setItem('kalsen_riders_data', JSON.stringify(res.riders)); } catch (e) {}
+        try { localStorage.setItem('urban_riders_data', JSON.stringify(res.riders)); } catch (e) {}
       }
     } catch (err) {
       console.warn('[Backend Sync Delete Rider]', err.message);
@@ -513,7 +513,7 @@ export const AdminProvider = ({ children }) => {
       const res = await api.createSurgeZone(zoneData);
       if (res?.zones) {
         setSurgeZones(res.zones);
-        try { localStorage.setItem('kalsen_surge_zones_data', JSON.stringify(res.zones)); } catch (e) {}
+        try { localStorage.setItem('urban_surge_zones_data', JSON.stringify(res.zones)); } catch (e) {}
         showToast('Surge Zone Added! 📍', `Zone "${zoneData.name}" saved in MongoDB`, 'success');
         return res.zones;
       }

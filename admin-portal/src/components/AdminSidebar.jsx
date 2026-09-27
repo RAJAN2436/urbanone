@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { KalsenAdminLogo } from './common/KalsenAdminLogo';
+import { UrbanAdminLogo } from './common/UrbanAdminLogo';
 import {
   Award,
   Zap,
@@ -76,7 +76,7 @@ export const AdminSidebar = ({ activeTab, setActiveTab }) => {
       {/* Top: Brand Header with Official SVG Admin Logo */}
       <div>
         <div className="p-5 border-b border-zinc-100 flex items-center justify-between">
-          <KalsenAdminLogo size="md" showSubtitle={true} />
+          <UrbanAdminLogo size="md" showSubtitle={true} />
         </div>
 
         {/* Navigation Menu */}

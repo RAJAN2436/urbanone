@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMerchant } from '../context/MerchantContext';
-import { KalsenPartnerLogo } from './common/KalsenPartnerLogo';
+import { UrbanPartnerLogo } from './common/UrbanPartnerLogo';
 import {
   Store,
   Bell,
@@ -29,7 +29,7 @@ export const MerchantHeader = () => {
         
         {/* Left: Official SVG Merchant Logo & Admin Assigned Store Badge */}
         <div className="flex items-center justify-between w-full sm:w-auto gap-4">
-          <KalsenPartnerLogo size="md" showSubtitle={true} />
+          <UrbanPartnerLogo size="md" showSubtitle={true} />
 
           {/* Admin Assigned Store Badge (Read-Only) */}
           <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs shadow-sm">

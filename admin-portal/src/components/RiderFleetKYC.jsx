@@ -20,7 +20,7 @@ export const RiderFleetKYC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const url = await uploadImage(file, 'kalsen-platform/riders');
+      const url = await uploadImage(file, 'urban-platform/riders');
       if (url) {
         setPhoto(url);
       }

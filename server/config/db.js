@@ -1034,10 +1034,12 @@ export const database = {
 
       return {
         id: o.id,
+        customerId: o.customer_id || null,
+        customerEmail: o.customer_email || null,
         customerName: o.customer_name || 'Customer',
-        customerPhone: o.customer_phone || '+91 98450 11223',
+        customerPhone: o.customer_phone || '',
         merchantId: o.merchant_id || 'm1',
-        merchantName: o.merchant_name || 'Kalsen Kitchen Ushait',
+        merchantName: o.merchant_name || 'Urban Kitchen Ushait',
         riderId,
         riderName: riderId ? (o.rider_name || null) : null,
         riderPhone: riderId ? (o.rider_phone || null) : null,
@@ -1085,8 +1087,10 @@ export const database = {
   createOrder: async (orderData, items = []) => {
     const formattedOrder = {
       id: orderData.id,
+      customer_id: orderData.customerId || null,
+      customer_email: orderData.customerEmail || null,
       customer_name: orderData.customerName,
-      customer_phone: orderData.customerPhone,
+      customer_phone: orderData.customerPhone || '',
       merchant_id: orderData.merchantId,
       merchant_name: orderData.merchantName,
       rider_id: orderData.riderId || null,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { KalsenAdminLogo } from './common/KalsenAdminLogo';
+import { UrbanAdminLogo } from './common/UrbanAdminLogo';
 import {
   ShieldCheck,
   Cpu,
@@ -18,7 +18,7 @@ export const AdminHeader = () => {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         
         {/* Brand with Official SVG Emblem */}
-        <KalsenAdminLogo size="md" showSubtitle={true} />
+        <UrbanAdminLogo size="md" showSubtitle={true} />
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">

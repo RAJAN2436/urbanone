@@ -77,7 +77,7 @@ export const PortalSwitcherBar = () => {
         <div className="flex items-center gap-2 text-xs">
           <span className="font-extrabold font-['Outfit'] text-white tracking-tight flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Kalsen<span className="text-orange-400">One</span> Ecosystem</span>
+            <span>Urban<span className="text-orange-400">One</span> Ecosystem</span>
           </span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-400 text-[11px] hidden md:inline">

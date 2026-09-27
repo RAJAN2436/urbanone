@@ -18,7 +18,7 @@ const USHAIT_CENTER_COORDS = { lat: 27.8048, lng: 79.2882 };
 // Helper to retrieve active server URL with mobile & custom IP persistence
 export const getActiveServerUrl = () => {
   try {
-    const saved = localStorage.getItem('kalsen_custom_server_url');
+    const saved = localStorage.getItem('urban_custom_server_url');
     if (saved && saved.trim()) {
       return saved.trim().replace(/\/api\/?$/, '').replace(/\/+$/, '');
     }
@@ -45,14 +45,14 @@ export const RiderProvider = ({ children }) => {
   // Authenticated Rider Account (from Login/Register)
   const [authRider, setAuthRider] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_rider_auth');
+      const saved = localStorage.getItem('urban_rider_auth');
       if (saved) {
         const parsed = JSON.parse(saved);
         // Clear stale Arjun Verma / r1 demo data
         if (parsed && (parsed.id === 'r1' || parsed.name === 'Arjun Verma')) {
-          localStorage.removeItem('kalsen_rider_auth');
-          localStorage.removeItem('kalsen_rider_profile');
-          localStorage.setItem('kalsen_rider_online', 'false');
+          localStorage.removeItem('urban_rider_auth');
+          localStorage.removeItem('urban_rider_profile');
+          localStorage.setItem('urban_rider_online', 'false');
           return null;
         }
         return parsed;
@@ -67,7 +67,7 @@ export const RiderProvider = ({ children }) => {
   const updateServerUrl = (newUrl) => {
     const cleanUrl = newUrl?.trim().replace(/\/+$/, '') || 'https://urbanone.onrender.com';
     try {
-      localStorage.setItem('kalsen_custom_server_url', cleanUrl);
+      localStorage.setItem('urban_custom_server_url', cleanUrl);
     } catch (e) {}
     setServerUrl(cleanUrl);
     showToast('Server Updated 🌐', `Connecting to: ${cleanUrl}`, 'info');
@@ -76,7 +76,7 @@ export const RiderProvider = ({ children }) => {
 
   const resetServerUrl = () => {
     try {
-      localStorage.removeItem('kalsen_custom_server_url');
+      localStorage.removeItem('urban_custom_server_url');
     } catch (e) {}
     const defaultUrl = 'https://urbanone.onrender.com';
     setServerUrl(defaultUrl);
@@ -87,7 +87,7 @@ export const RiderProvider = ({ children }) => {
   // Rider Profile - Clean defaults connected to platform or authenticated rider
   const [rider, setRider] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_rider_profile');
+      const saved = localStorage.getItem('urban_rider_profile');
       if (saved) {
         const parsed = JSON.parse(saved);
         return {
@@ -129,7 +129,7 @@ export const RiderProvider = ({ children }) => {
   });
 
   const [isOnline, setIsOnline] = useState(() => {
-    return localStorage.getItem('kalsen_rider_online') !== 'false';
+    return localStorage.getItem('urban_rider_online') !== 'false';
   });
 
   // Current GPS coordinates of Rider
@@ -143,6 +143,8 @@ export const RiderProvider = ({ children }) => {
   const socketRef = useRef(null);
   const incomingTimerRef = useRef(null);
   const dismissedOrderIdsRef = useRef(new Set());
+  const processingOrderIdsRef = useRef(new Set());
+  const acceptedOrderIdsRef = useRef(new Set());
   const activeOrderIdRef = useRef(null);
 
   // Toast Notification helper
@@ -235,7 +237,7 @@ export const RiderProvider = ({ children }) => {
     socketRef.current = socket;
 
     socket.on('connect', () => {
-      console.log('⚡ [Rider Socket] Connected to Kalsen Backend');
+      console.log('⚡ [Rider Socket] Connected to Urban Backend');
       socket.emit('join:rider', rider.id);
     });
 
@@ -250,14 +252,23 @@ export const RiderProvider = ({ children }) => {
       const newOrder = payload?.order || payload;
       if (!newOrder?.id || !isOnline) return;
       if (payload?.dispatchType === 'assigned' && newOrder.riderId && newOrder.riderId !== rider.id && newOrder.riderId !== authRider?.id) {
+        setIncomingOrder((prev) => (prev?.id === newOrder.id ? null : prev));
         return;
       }
       setOrders((prev) => [newOrder, ...prev.filter((o) => o.id !== newOrder.id)]);
       const waiting = ['accepted', 'preparing', 'ready', 'ready_for_pickup'].includes(newOrder.orderStatus);
-      if (waiting && !newOrder.riderId) {
-        setIncomingOrder(newOrder);
-        playSound('incoming');
-        showToast('Delivery Request 🛵', `Merchant accepted order #${newOrder.id}. Accept to pick up.`, 'info');
+      const isAlreadyHandled =
+        dismissedOrderIdsRef.current.has(newOrder.id) ||
+        processingOrderIdsRef.current.has(newOrder.id) ||
+        acceptedOrderIdsRef.current.has(newOrder.id);
+
+      if (waiting && !newOrder.riderId && !activeOrderIdRef.current && !isAlreadyHandled) {
+        setIncomingOrder((prev) => {
+          if (prev?.id === newOrder.id) return prev; // Avoid duplicate triggers
+          playSound('incoming');
+          showToast('Delivery Request 🛵', `Merchant accepted order #${newOrder.id}. Accept to pick up.`, 'info');
+          return newOrder;
+        });
       }
     };
 
@@ -287,13 +298,13 @@ export const RiderProvider = ({ children }) => {
             approvalStatus: payload.approvalStatus,
             kycVerified: isApprovedNow
           };
-          try { localStorage.setItem('kalsen_rider_auth', JSON.stringify(next)); } catch (e) {}
+          try { localStorage.setItem('urban_rider_auth', JSON.stringify(next)); } catch (e) {}
           return next;
         });
 
         if (isApprovedNow) {
           playSound('success');
-          showToast('Account Approved! 🎉', 'Kalsen Admin has approved your application! You can now start taking deliveries.', 'success');
+          showToast('Account Approved! 🎉', 'Urban Admin has approved your application! You can now start taking deliveries.', 'success');
         }
       }
     });
@@ -311,7 +322,7 @@ export const RiderProvider = ({ children }) => {
               approvalStatus: match.approvalStatus || (isApprovedNow ? 'approved' : 'pending'),
               kycVerified: isApprovedNow
             };
-            try { localStorage.setItem('kalsen_rider_auth', JSON.stringify(next)); } catch (e) {}
+            try { localStorage.setItem('urban_rider_auth', JSON.stringify(next)); } catch (e) {}
             return next;
           });
         }
@@ -339,7 +350,7 @@ export const RiderProvider = ({ children }) => {
             const isApprovedNow = data.rider.approvalStatus === 'approved' || data.rider.kycVerified;
             if (isApprovedNow && authRider.approvalStatus !== 'approved') {
               setAuthRider(data.rider);
-              try { localStorage.setItem('kalsen_rider_auth', JSON.stringify(data.rider)); } catch (e) {}
+              try { localStorage.setItem('urban_rider_auth', JSON.stringify(data.rider)); } catch (e) {}
               playSound('success');
               showToast('Account Approved! 🎉', 'Admin has approved your registration! Dispatch duty is unlocked.', 'success');
             }
@@ -377,7 +388,7 @@ export const RiderProvider = ({ children }) => {
     }
     const nextState = !isOnline;
     setIsOnline(nextState);
-    localStorage.setItem('kalsen_rider_online', nextState.toString());
+    localStorage.setItem('urban_rider_online', nextState.toString());
     const dutyId = authRider?.id || rider.id;
     fetch(apiUrl(`/api/riders/${dutyId}/duty`), {
       method: 'PATCH',
@@ -409,7 +420,7 @@ export const RiderProvider = ({ children }) => {
       if (res.ok && data.success && data.rider) {
         setAuthRider(data.rider);
         try {
-          localStorage.setItem('kalsen_rider_auth', JSON.stringify(data.rider));
+          localStorage.setItem('urban_rider_auth', JSON.stringify(data.rider));
         } catch (e) {}
         playSound('success');
         return { success: true, rider: data.rider, message: data.message };
@@ -434,7 +445,7 @@ export const RiderProvider = ({ children }) => {
       if (res.ok && data.success && data.rider) {
         setAuthRider(data.rider);
         try {
-          localStorage.setItem('kalsen_rider_auth', JSON.stringify(data.rider));
+          localStorage.setItem('urban_rider_auth', JSON.stringify(data.rider));
         } catch (e) {}
         playSound('success');
         showToast(`Welcome back!`, `${data.rider.name}, you are signed in`, 'success');
@@ -449,8 +460,8 @@ export const RiderProvider = ({ children }) => {
 
   const logoutRider = () => {
     try {
-      localStorage.removeItem('kalsen_rider_auth');
-      localStorage.setItem('kalsen_rider_online', 'false');
+      localStorage.removeItem('urban_rider_auth');
+      localStorage.setItem('urban_rider_online', 'false');
     } catch (e) {}
     setAuthRider(null);
     setIsOnline(false);
@@ -463,12 +474,12 @@ export const RiderProvider = ({ children }) => {
     setAuthRider((prev) => {
       if (!prev) return prev;
       const next = { ...prev, ...updates };
-      try { localStorage.setItem('kalsen_rider_auth', JSON.stringify(next)); } catch (e) {}
+      try { localStorage.setItem('urban_rider_auth', JSON.stringify(next)); } catch (e) {}
       return next;
     });
     setRider((prev) => ({ ...prev, ...updates }));
     try {
-      localStorage.setItem('kalsen_rider_profile', JSON.stringify({ ...rider, ...updates }));
+      localStorage.setItem('urban_rider_profile', JSON.stringify({ ...rider, ...updates }));
     } catch (e) {}
 
     // Persist to server
@@ -484,7 +495,7 @@ export const RiderProvider = ({ children }) => {
           const data = await res.json();
           if (data.rider) {
             setAuthRider(data.rider);
-            try { localStorage.setItem('kalsen_rider_auth', JSON.stringify(data.rider)); } catch (e) {}
+            try { localStorage.setItem('urban_rider_auth', JSON.stringify(data.rider)); } catch (e) {}
           }
         }
       } catch (e) {}
@@ -505,7 +516,7 @@ export const RiderProvider = ({ children }) => {
           const isNowApproved = data.rider.approvalStatus === 'approved' || data.rider.kycVerified;
           setAuthRider(data.rider);
           try {
-            localStorage.setItem('kalsen_rider_auth', JSON.stringify(data.rider));
+            localStorage.setItem('urban_rider_auth', JSON.stringify(data.rider));
           } catch (e) {}
           return data;
         }
@@ -538,7 +549,12 @@ export const RiderProvider = ({ children }) => {
   // Auto-alert rider when a pending order is waiting and rider has no active task
   useEffect(() => {
     if (isOnline && !activeOrder && !incomingOrder && availableOrders.length > 0) {
-      const unhandledOrder = availableOrders.find((o) => !dismissedOrderIdsRef.current.has(o.id));
+      const unhandledOrder = availableOrders.find(
+        (o) =>
+          !dismissedOrderIdsRef.current.has(o.id) &&
+          !processingOrderIdsRef.current.has(o.id) &&
+          !acceptedOrderIdsRef.current.has(o.id)
+      );
       if (unhandledOrder) {
         setIncomingOrder(unhandledOrder);
         playSound('incoming');
@@ -569,14 +585,25 @@ export const RiderProvider = ({ children }) => {
 
   // Accept incoming delivery order from main platform
   const acceptIncomingOrder = async (orderId) => {
+    if (!orderId) return;
+    if (processingOrderIdsRef.current.has(orderId) || acceptedOrderIdsRef.current.has(orderId)) {
+      return;
+    }
+    processingOrderIdsRef.current.add(orderId);
+    acceptedOrderIdsRef.current.add(orderId);
+
     if (incomingTimerRef.current) clearTimeout(incomingTimerRef.current);
     const orderToAccept = incomingOrder?.id === orderId ? incomingOrder : orders.find((o) => o.id === orderId);
+    
+    // Close incoming modal immediately
     setIncomingOrder(null);
 
     // Use resolved IDs — authRider.id takes priority over the raw default rider.id
     const resolvedRiderId = authRider?.id || rider.id;
     const resolvedRiderName = authRider?.name || authRider?.fullName || rider.name;
     const resolvedRiderPhone = authRider?.phone || authRider?.mobileNumber || rider.phone;
+
+    activeOrderIdRef.current = orderId;
 
     const payload = {
       status: 'rider_assigned',
@@ -587,6 +614,18 @@ export const RiderProvider = ({ children }) => {
       lng: currentLocation.lng
     };
 
+    // Immediate optimistic update to prevent race conditions and duplicate prompts
+    setOrders((prev) => {
+      const exists = prev.some((o) => o.id === orderId);
+      if (exists) {
+        return prev.map((o) => (o.id === orderId ? { ...o, ...payload, orderStatus: 'rider_assigned' } : o));
+      }
+      if (orderToAccept) {
+        return [{ ...orderToAccept, ...payload, orderStatus: 'rider_assigned' }, ...prev];
+      }
+      return [{ id: orderId, ...payload, orderStatus: 'rider_assigned' }, ...prev];
+    });
+
     try {
       const res = await fetch(apiUrl(`/api/orders/${orderId}/status`), {
         method: 'PATCH',
@@ -596,25 +635,16 @@ export const RiderProvider = ({ children }) => {
 
       if (res.ok) {
         const data = await res.json();
-        setOrders((prev) =>
-          prev.map((o) => (o.id === orderId ? { ...o, orderStatus: 'rider_assigned', riderId: resolvedRiderId, ...payload } : o))
-        );
-      } else {
-        setOrders((prev) => {
-          const exists = prev.some((o) => o.id === orderId);
-          if (exists) {
-            return prev.map((o) => (o.id === orderId ? { ...o, orderStatus: 'rider_assigned', riderId: resolvedRiderId, ...payload } : o));
-          }
-          if (orderToAccept) {
-            return [{ ...orderToAccept, orderStatus: 'rider_assigned', riderId: resolvedRiderId, ...payload }, ...prev];
-          }
-          return prev;
-        });
+        if (data.order) {
+          setOrders((prev) =>
+            prev.map((o) => (o.id === orderId ? { ...o, ...data.order } : o))
+          );
+        }
       }
     } catch (e) {
-      if (orderToAccept) {
-        setOrders((prev) => [{ ...orderToAccept, orderStatus: 'rider_assigned', riderId: resolvedRiderId, ...payload }, ...prev.filter(o => o.id !== orderId)]);
-      }
+      console.warn('[Rider accept order network error]:', e.message);
+    } finally {
+      processingOrderIdsRef.current.delete(orderId);
     }
 
     if (socketRef.current?.connected) {
@@ -830,7 +860,7 @@ export const RiderProvider = ({ children }) => {
       : 'Just now';
     return {
       id: o.id,
-      merchant: o.merchantName || 'Kalsen Merchant',
+      merchant: o.merchantName || 'Urban Merchant',
       customer: `${o.customerName || 'Customer'} • ${o.deliveryAddress || 'Ushait'}`,
       distance: '1.4 km',
       payout,

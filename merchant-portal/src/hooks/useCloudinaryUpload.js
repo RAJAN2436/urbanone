@@ -40,10 +40,10 @@ export const useCloudinaryUpload = () => {
   /**
    * Upload image file to Cloudinary.
    * @param {File|Blob|string} file - The file object or base64 string to upload
-   * @param {string} folder - Optional Cloudinary folder name (default: 'kalsen-platform')
+   * @param {string} folder - Optional Cloudinary folder name (default: 'urban-platform')
    * @returns {Promise<string|null>} Cloudinary secure_url string or fallback URL
    */
-  const uploadImage = async (file, folder = 'kalsen-platform') => {
+  const uploadImage = async (file, folder = 'urban-platform') => {
     if (!file) return null;
 
     setUploading(true);

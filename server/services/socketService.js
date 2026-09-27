@@ -101,7 +101,7 @@ export const emitNewOrder = async (order) => {
 export const emitRiderDispatch = (order) => {
   if (!ioInstance || !order) return;
   const payload = { order, timestamp: Date.now() };
-  ioInstance.to('riders_room').emit('rider:dispatch', payload);
+  // Broadcast once to all connected clients (including riders) to avoid duplicate accept modals
   ioInstance.emit('rider:dispatch', payload);
 };
 
@@ -109,19 +109,12 @@ export const emitOrderStatusUpdate = async (order) => {
   if (!ioInstance) return;
   ioInstance.emit('order:status_updated', { order, timestamp: Date.now() });
   ioInstance.emit('order:updated', { order, timestamp: Date.now() });
-  if (order?.id) {
-    ioInstance.to(`order_${order.id}`).emit('order:status_updated', { order, timestamp: Date.now() });
-    ioInstance.to(`order_${order.id}`).emit('order:updated', { order, timestamp: Date.now() });
-  }
   await emitOrdersUpdate();
 };
 
 export const emitRiderLocationUpdate = (data) => {
   if (!ioInstance || !data) return;
   ioInstance.emit('rider:location_updated', data);
-  if (data.orderId) {
-    ioInstance.to(`order_${data.orderId}`).emit('rider:location_updated', data);
-  }
 };
 
 export const emitRidersUpdate = async (riders) => {

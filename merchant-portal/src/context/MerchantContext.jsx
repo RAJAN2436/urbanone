@@ -16,13 +16,13 @@ export const useMerchant = () => {
 
 export const MerchantProvider = ({ children }) => {
   const [activeMerchantId, setActiveMerchantId] = useState(() => {
-    const saved = localStorage.getItem('kalsen_active_merchant_id');
+    const saved = localStorage.getItem('urban_active_merchant_id');
     return (saved === 'm1' || saved === 'm2') ? '' : (saved || '');
   });
 
   const [merchants, setMerchants] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_merchants_data');
+      const saved = localStorage.getItem('urban_merchants_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -35,7 +35,7 @@ export const MerchantProvider = ({ children }) => {
 
   const [orders, setOrders] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_orders_data');
+      const saved = localStorage.getItem('urban_orders_data');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -47,12 +47,12 @@ export const MerchantProvider = ({ children }) => {
   });
 
   const [merchantToken, setMerchantToken] = useState(() => {
-    return localStorage.getItem('kalsen_merchant_token') || null;
+    return localStorage.getItem('urban_merchant_token') || null;
   });
 
   const [merchantUser, setMerchantUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('kalsen_merchant_user');
+      const saved = localStorage.getItem('urban_merchant_user');
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
       return null;
@@ -75,13 +75,13 @@ export const MerchantProvider = ({ children }) => {
       if (merchantsRes.status === 'fulfilled') {
         const list = merchantsRes.value?.merchants || [];
         setMerchants(list);
-        try { localStorage.setItem('kalsen_merchants_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_merchants_data', JSON.stringify(list)); } catch (e) {}
       }
 
       if (ordersRes.status === 'fulfilled') {
         const list = ordersRes.value?.orders || [];
         setOrders(list);
-        try { localStorage.setItem('kalsen_orders_data', JSON.stringify(list)); } catch (e) {}
+        try { localStorage.setItem('urban_orders_data', JSON.stringify(list)); } catch (e) {}
       }
     } catch (err) {
       console.warn('[MerchantContext] Backend sync notice:', err.message);
@@ -96,8 +96,8 @@ export const MerchantProvider = ({ children }) => {
         const list = res.merchants || [res.merchant];
         setMerchants(list);
         try {
-          localStorage.setItem('kalsen_active_merchant_id', res.merchant.id);
-          localStorage.setItem('kalsen_merchants_data', JSON.stringify(list));
+          localStorage.setItem('urban_active_merchant_id', res.merchant.id);
+          localStorage.setItem('urban_merchants_data', JSON.stringify(list));
         } catch (e) {}
         showToast('Store Registered! 🏪', `"${res.merchant.name}" is now live on the platform!`, 'success');
         return res.merchant;
@@ -114,9 +114,9 @@ export const MerchantProvider = ({ children }) => {
         setMerchantToken(res.token);
         setMerchantUser(res.merchant);
         setActiveMerchantId(res.merchant.id);
-        localStorage.setItem('kalsen_merchant_token', res.token);
-        localStorage.setItem('kalsen_merchant_user', JSON.stringify(res.merchant));
-        localStorage.setItem('kalsen_active_merchant_id', res.merchant.id);
+        localStorage.setItem('urban_merchant_token', res.token);
+        localStorage.setItem('urban_merchant_user', JSON.stringify(res.merchant));
+        localStorage.setItem('urban_active_merchant_id', res.merchant.id);
         showToast('Login Successful 🚀', `Welcome back, ${res.merchant.name}!`, 'success');
         playSound('success');
         return res.merchant;
@@ -134,9 +134,9 @@ export const MerchantProvider = ({ children }) => {
         setMerchantToken(res.token);
         setMerchantUser(res.merchant);
         setActiveMerchantId(res.merchant.id);
-        localStorage.setItem('kalsen_merchant_token', res.token);
-        localStorage.setItem('kalsen_merchant_user', JSON.stringify(res.merchant));
-        localStorage.setItem('kalsen_active_merchant_id', res.merchant.id);
+        localStorage.setItem('urban_merchant_token', res.token);
+        localStorage.setItem('urban_merchant_user', JSON.stringify(res.merchant));
+        localStorage.setItem('urban_active_merchant_id', res.merchant.id);
         showToast('Store Registered! 🏪', `"${res.merchant.name}" is now live on the platform!`, 'success');
         confetti({ particleCount: 75, spread: 60, origin: { y: 0.6 } });
         playSound('success');
@@ -152,9 +152,9 @@ export const MerchantProvider = ({ children }) => {
     setMerchantToken(null);
     setMerchantUser(null);
     setActiveMerchantId('');
-    localStorage.removeItem('kalsen_merchant_token');
-    localStorage.removeItem('kalsen_merchant_user');
-    localStorage.removeItem('kalsen_active_merchant_id');
+    localStorage.removeItem('urban_merchant_token');
+    localStorage.removeItem('urban_merchant_user');
+    localStorage.removeItem('urban_active_merchant_id');
     showToast('Signed Out', 'You have been signed out of Merchant OS', 'info');
   };
 
@@ -168,7 +168,7 @@ export const MerchantProvider = ({ children }) => {
     socketRef.current = socket;
 
     socket.on('connect', () => {
-      const merchantId = localStorage.getItem('kalsen_active_merchant_id');
+      const merchantId = localStorage.getItem('urban_active_merchant_id');
       if (merchantId) socket.emit('join:merchant', merchantId);
     });
 
@@ -176,7 +176,7 @@ export const MerchantProvider = ({ children }) => {
       const list = Array.isArray(payload?.orders) ? payload.orders : (Array.isArray(payload) ? payload : null);
       if (list) {
         setOrders(list);
-        localStorage.setItem('kalsen_orders_data', JSON.stringify(list));
+        localStorage.setItem('urban_orders_data', JSON.stringify(list));
       }
     });
 
@@ -215,7 +215,7 @@ export const MerchantProvider = ({ children }) => {
       const list = Array.isArray(payload?.merchants) ? payload.merchants : (Array.isArray(payload) ? payload : null);
       if (list) {
         setMerchants(list);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(list));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(list));
       }
     });
 
@@ -235,15 +235,15 @@ export const MerchantProvider = ({ children }) => {
 
   // Sync to local storage
   useEffect(() => {
-    localStorage.setItem('kalsen_active_merchant_id', activeMerchantId);
+    localStorage.setItem('urban_active_merchant_id', activeMerchantId);
   }, [activeMerchantId]);
 
   useEffect(() => {
-    localStorage.setItem('kalsen_merchants_data', JSON.stringify(merchants));
+    localStorage.setItem('urban_merchants_data', JSON.stringify(merchants));
   }, [merchants]);
 
   useEffect(() => {
-    localStorage.setItem('kalsen_orders_data', JSON.stringify(orders));
+    localStorage.setItem('urban_orders_data', JSON.stringify(orders));
   }, [orders]);
 
   // Toast helper
@@ -314,7 +314,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.addDish(merchantId, dishWithId);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync addDish]', err.message);
@@ -338,7 +338,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.updateDish(merchantId, dishId, updatedDish);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync updateDish]', err.message);
@@ -362,7 +362,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.deleteDish(merchantId, dishId);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync deleteDish]', err.message);
@@ -384,7 +384,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.toggleDishStock(merchantId, dishId);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync toggleStock]', err.message);
@@ -405,7 +405,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.updateMerchant(merchantId, updatedFields);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync updateProfile]', err.message);
@@ -426,7 +426,7 @@ export const MerchantProvider = ({ children }) => {
       const res = await api.toggleMerchantStatus(merchantId);
       if (res?.merchants && Array.isArray(res.merchants)) {
         setMerchants(res.merchants);
-        localStorage.setItem('kalsen_merchants_data', JSON.stringify(res.merchants));
+        localStorage.setItem('urban_merchants_data', JSON.stringify(res.merchants));
       }
     } catch (err) {
       console.warn('[Backend Sync toggleStatus]', err.message);

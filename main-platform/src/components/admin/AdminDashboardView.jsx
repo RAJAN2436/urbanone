@@ -91,7 +91,7 @@ export const AdminDashboardView = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-extrabold text-white">KalsenOneCo Command Center</h2>
+              <h2 className="text-xl font-extrabold text-white">UrbanOneCo Command Center</h2>
               <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase">
                 Admin Governance
               </span>
