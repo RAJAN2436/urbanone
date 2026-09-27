@@ -15,6 +15,8 @@
     "build:merchant": "vite build merchant-portal",
     "build:admin": "vite build admin-portal",
     "build:rider": "vite build delivery-partner-app",
+    "build:server": "echo 'Server build complete'",
+    "start": "node server/server.js",
     "preview": "vite preview main-platform --port 5173",
     "preview:main": "vite preview main-platform --port 5173"
   },
