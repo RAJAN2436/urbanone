@@ -1,5 +1,15 @@
+import dns from 'dns';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
+
+// Configure reliable DNS servers (Google & Cloudflare) to ensure MongoDB SRV queries resolve
+// without getting querySrv ECONNREFUSED on local ISPs or restricted network environments
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {
+  // Fallback to system default if custom DNS cannot be configured
+}
+
 import {
   initialMerchants,
   initialDishes,
@@ -34,10 +44,11 @@ export const connectDB = async () => {
   mongoConnectionUri = uri;
 
   try {
-    console.log(`[MERN Stack] 🍃 Connecting to MongoDB at: ${uri}...`);
+    const maskedUri = uri.includes('@') ? uri.replace(/:([^:@]+)@/, ':****@') : uri;
+    console.log(`[MERN Stack] 🍃 Connecting to MongoDB at: ${maskedUri}...`);
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 2000,
-      connectTimeoutMS: 2000
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000
     });
 
     isConnectedToMongo = true;
