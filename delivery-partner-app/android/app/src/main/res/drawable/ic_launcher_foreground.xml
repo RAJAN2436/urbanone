@@ -1,0 +1,56 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:translateX="22"
+        android:translateY="22"
+        android:scaleX="0.32"
+        android:scaleY="0.32">
+        <!-- Speed Streaks on Left -->
+        <path
+            android:fillColor="#F97316"
+            android:pathData="M 20,56 L 54,56 C 56.8,56 59,58.2 59,61 C 59,63.8 56.8,66 54,66 L 20,66 C 17.2,66 15,63.8 15,61 C 15,58.2 17.2,56 20,56 Z" />
+        <path
+            android:fillColor="#F97316"
+            android:pathData="M 8,78 L 54,78 C 56.8,78 59,80.2 59,83 C 59,85.8 56.8,88 54,88 L 8,88 C 5.2,88 3,85.8 3,83 C 3,80.2 5.2,78 8,78 Z" />
+        <path
+            android:fillColor="#F97316"
+            android:pathData="M 18,100 L 54,100 C 56.8,100 59,102.2 59,105 C 59,107.8 56.8,110 54,110 L 18,110 C 15.2,110 13,107.8 13,105 C 13,102.2 15.2,100 18,100 Z" />
+        <path
+            android:fillColor="#F97316"
+            android:pathData="M 28,122 L 54,122 C 56.8,122 59,124.2 59,127 C 59,129.8 56.8,132 54,132 L 28,132 C 25.2,132 23,129.8 23,127 C 23,124.2 25.2,122 28,122 Z" />
+
+        <!-- Vertical & Left Slanted Stem of 'K' -->
+        <path
+            android:fillColor="#EA580C"
+            android:pathData="M 85,24 L 115,24 C 117,24 119,25 119,27 L 85,174 C 84,176 82,177 80,177 L 55,177 C 52,177 50,175 51,172 L 80,27 C 81,25 83,24 85,24 Z" />
+
+        <!-- Top Diagonal Wing of 'K' -->
+        <path
+            android:fillColor="#F97316"
+            android:pathData="M 115,48 L 180,24 C 183,23 186,26 184,29 L 140,102 L 105,76 Z" />
+
+        <!-- Bottom Charcoal Diagonal Leg of 'K' -->
+        <path
+            android:fillColor="#18181B"
+            android:pathData="M 125,106 L 176,172 C 178,175 176,178 172,178 L 138,178 C 135,178 133,177 131,174 L 92,120 Z" />
+
+        <!-- Food Cloche Dome in Center -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M 106,57 C 108.8,57 111,59.2 111,62 C 111,64.8 108.8,67 106,67 C 103.2,67 101,64.8 101,62 C 101,59.2 103.2,57 106,57 Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M 78,98 C 78,74 90,68 106,68 C 122,68 134,74 134,98 Z" />
+        <path
+            android:strokeColor="#EA580C"
+            android:strokeWidth="3.5"
+            android:strokeLineCap="round"
+            android:pathData="M 116,73 C 126,77 130,84 131,96" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M 70,98 L 142,98 C 143.9,98 145.5,99.6 145.5,101.5 C 145.5,103.4 143.9,105 142,105 L 70,105 C 68.1,105 66.5,103.4 66.5,101.5 C 66.5,99.6 68.1,98 70,98 Z" />
+    </group>
+</vector>

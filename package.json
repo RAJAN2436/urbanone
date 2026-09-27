@@ -1,0 +1,39 @@
+{
+  "name": "kalsen-platform",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite main-platform --port 5173",
+    "dev:main": "vite main-platform --port 5173",
+    "dev:merchant": "vite merchant-portal --port 3000",
+    "dev:admin": "vite admin-portal --port 3001",
+    "dev:rider": "vite delivery-partner-app --port 3002",
+    "server": "node --watch server/server.js",
+    "dev:server": "node --watch server/server.js",
+    "build": "vite build main-platform",
+    "build:main": "vite build main-platform",
+    "build:merchant": "vite build merchant-portal",
+    "build:admin": "vite build admin-portal",
+    "build:rider": "vite build delivery-partner-app",
+    "preview": "vite preview main-platform --port 5173",
+    "preview:main": "vite preview main-platform --port 5173"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "cloudinary": "^2.11.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "lucide-react": "^1.48.0",
+    "mongoose": "^9.10.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "socket.io": "^4.8.4",
+    "socket.io-client": "^4.8.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.3.3",
+    "vite": "^6.0.7"
+  }
+}

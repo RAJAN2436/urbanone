@@ -1,0 +1,12 @@
+{
+  "name": "kalsen-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "node --watch server.js",
+    "dev": "node --watch server.js",
+    "dev:server": "node --watch server.js"
+  }
+}

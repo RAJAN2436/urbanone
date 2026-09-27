@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KalsenOne Suite — Unified Next-Gen Delivery Ecosystem</title>
+    <meta name="description" content="KalsenOne customer app, KalsenOneRider dispatch suite, KalsenOneMerchant kitchen portal, and KalsenOneCo admin command center." />
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none'><rect x='20' y='56' width='34' height='10' rx='5' fill='%23f97316'/><rect x='8' y='78' width='46' height='10' rx='5' fill='%23f97316'/><rect x='18' y='100' width='36' height='10' rx='5' fill='%23f97316'/><path d='M85 24 L115 24 L85 174 L55 174 Z' fill='%23f97316'/><path d='M115 48 L180 24 L140 102 L105 76 Z' fill='%23f97316'/><path d='M125 106 L176 172 L138 178 L92 120 Z' fill='%2318181b'/><circle cx='106' cy='62' r='5' fill='%23ffffff'/><path d='M78 98 C78 74 90 68 106 68 C122 68 134 74 134 98 Z' fill='%23ffffff'/><rect x='70' y='98' width='72' height='7' rx='3.5' fill='%23ffffff'/></svg>" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+              heading: ['Outfit', 'sans-serif']
+            },
+            colors: {
+              brand: {
+                50: '#fff7ed',
+                100: '#ffedd5',
+                200: '#fed7aa',
+                300: '#fdba74',
+                400: '#fb923c',
+                500: '#f97316', // Primary #F97316
+                600: '#ea580c',
+                700: '#c2410c',
+                800: '#9a3412',
+                900: '#7c2d12'
+              },
+              zinc: {
+                850: '#1e1e24',
+                950: '#09090b'
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-white text-zinc-900 antialiased selection:bg-orange-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
